@@ -1,5 +1,6 @@
 body {
     background-color: var(--color-background-page);
+    margin: 0;
 }
 h2 {
     color: var(--color-text-heading);
