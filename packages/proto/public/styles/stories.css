@@ -13,7 +13,7 @@ img {
 .left-column {
     flex: 2;
     padding-right: 20px;
-    border-right: 2px solid #ccc; /* the dividing line */
+    border-right: 2px solid #ccc;
 }
 
 .right-column {
