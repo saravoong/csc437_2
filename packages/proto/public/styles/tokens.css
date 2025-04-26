@@ -1,9 +1,10 @@
 :root {
-    --color-background-header: rgb(12, 41, 96);
+    --color-background-header: var(--color-text-heading);
     --color-header-text: rgb(255, 255, 255);
-    --color-background-page: rgb(155, 196, 221);
-    --color-accent: rgb(35, 69, 122);
-    --color-link: var(--color-accent);
-    --color-text: var(--color-background-header);
+    --color-background-page: rgb(255, 255, 255);
+    --color-accent: rgb(99, 129, 177);
+    --color-link: var(--color-text-heading);
+    --color-text: rgb(36, 34, 38);
     --color-text-heading: rgb(37, 86, 142);
+
 }
