@@ -99,13 +99,21 @@ svg.icon {
     fill: rgb(243, 203, 116);
 }
 
-.all-stories-grid {
+.stories-grid {
     display: grid;
     grid-template-columns: [start] 1fr 1fr 1fr 1fr[end];
     gap: 1rem;
     margin-top: 1rem;
 }
 
+.stories-grid > * {
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    background-color: rgb(246, 246, 246);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 
 
