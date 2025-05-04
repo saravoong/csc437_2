@@ -63,7 +63,7 @@ header a, header p {
 }
 
 .front-page-header {
-    background: linear-gradient(to right, #ff987aff, #f792c8ff, #b693fdff);
+    background: var(--episode-logo-gradient);
     text-align: center;
     margin: 0;
     padding: 25px;
@@ -109,7 +109,7 @@ svg.icon {
 .stories-grid > * {
     border: 1.5px solid rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
-    background-color: rgb(246, 246, 246);
+    background-color: var(--background-color-stories-homepage);
     display: flex;
     justify-content: center;
     align-items: center;

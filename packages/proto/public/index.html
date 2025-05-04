@@ -9,11 +9,32 @@
     <link rel="stylesheet" href="/styles/reset.css" />
     <link rel="stylesheet" href="/styles/tokens.css" />
     <link rel="stylesheet" href="/styles/page.css" />
+    <script type="module">
+        import { relayEvent } from "/js/relay-event.js";
+        window.relayEvent = relayEvent;
+    </script>
+    <script type="module">
+        function toggleDarkMode(page, checked) {
+            page.classList.toggle("dark-mode", checked);
+        }
+
+        document.body.addEventListener("dark-mode", (event) =>
+            toggleDarkMode(
+                event.currentTarget,
+                event.detail.checked
+            )
+        );
+    </script>
 </head>
 <body>
 <header class="front-page-header">
     <h1 class="Episode-logo">Episode</h1>
     <p>For all the Episode fans out there!</p>
+    <label>
+        <input type="checkbox"
+               onchange="relayEvent(event, 'dark-mode', {checked: event.target.checked})"
+        /> Dark mode
+    </label>
 </header>
 <hr>
 <section class="Trending">
