@@ -59,7 +59,7 @@ export class StoryTemplateElement extends LitElement {
             <hr>
             <section>
                 <h3>Synopsis</h3>
-                <p>When your hot, mysterious celebrity invites you to a charity gala, you are determined to be reunited. Will the stars align for you to find each other?</p>
+                <p> ${this.synopsis}</p>
             </section>
             <hr>
             <section>
