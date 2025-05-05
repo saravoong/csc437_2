@@ -1,6 +1,6 @@
 import { define } from "@calpoly/mustang";
-import { DestinationElement } from "./story-chapter";
+import { ChapterTemplateElement } from "./story-chapter";
 
 define({
-    "blz-header": DestinationElement,
+    "chapter-template": ChapterTemplateElement,
 });
