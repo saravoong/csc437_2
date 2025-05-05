@@ -28,7 +28,6 @@ export class ChapterTemplateElement extends LitElement {
 
     override render() {
         return html`
-
             <section>
                 <header>
                     <a href="${this.href}">&larr; Back</a>
