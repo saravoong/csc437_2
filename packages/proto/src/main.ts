@@ -1,6 +1,6 @@
 import { define } from "@calpoly/mustang";
-import { ChapterTemplateElement } from "./story-chapter";
-import { StoryTemplateElement } from "./story";
+import { ChapterTemplateElement } from "./story-chapter.ts";
+import { StoryTemplateElement } from "./story.ts";
 
 define({
     "chapter-template": ChapterTemplateElement,

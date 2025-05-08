@@ -1,0 +1,1 @@
+import"./modulepreload-polyfill-B5Qt9EMX.js";function a(e,t,n){const r=e.currentTarget,o=new CustomEvent(t,{bubbles:!0,composed:!0,detail:n});console.log(`Relaying event from ${e.type}:`,o),r.dispatchEvent(o),e.stopPropagation()}window.relayEvent=a;function c(e,t){e.classList.toggle("dark-mode",t)}document.body.addEventListener("dark-mode",e=>c(e.currentTarget,e.detail.checked));
