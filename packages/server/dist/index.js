@@ -22,14 +22,30 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var import_express = __toESM(require("express"));
-var import_mongo = require("./services/mongo");
+var import_auth = __toESM(require("./routes/auth"));
 var import_story_svc = __toESM(require("./services/story-svc"));
+var import_stories = __toESM(require("./routes/stories"));
+var import_user_svc = __toESM(require("./services/user-svc"));
+var import_users = __toESM(require("./routes/users"));
+var import_mongo = require("./services/mongo");
 const app = (0, import_express.default)();
 const port = process.env.PORT || 3e3;
+(0, import_mongo.connect)("episode");
 const staticDir = process.env.STATIC || "public";
+console.log("Serving static files from ", staticDir);
 app.use(import_express.default.static(staticDir));
-app.get("/hello", (req, res) => {
-  res.send("Hello, Wrld");
+app.use(import_express.default.raw({ type: "image/*", limit: "32Mb" }));
+app.use(import_express.default.json());
+app.use("/auth", import_auth.default);
+app.use("/api/stories", import_auth.authenticateUser, import_stories.default);
+app.use("/api/users", import_auth.authenticateUser, import_users.default);
+app.get("/ping", (_, res) => {
+  res.send(
+    `<h1>Hello!</h1>
+     <p>Server is up and running.</p>
+     <p>Serving static files from <code>${staticDir}</code>.</p>
+    `
+  );
 });
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
@@ -49,4 +65,28 @@ app.get("/stories/:storyPath", (req, res) => {
     else res.status(404).send();
   });
 });
-(0, import_mongo.connect)("episode");
+app.get("/stories/:storyPath/chapters/:chapterNumber", (req, res) => {
+  const { storyPath, chapterNumber } = req.params;
+  const chapterNum = Number(chapterNumber);
+  import_story_svc.default.getChapter(storyPath, chapterNum).then((data) => {
+    res.set("Content-Type", "application/json").send(JSON.stringify(data));
+  }).catch((err) => {
+    res.status(404).send(err);
+  });
+});
+app.get("/users", async (req, res) => {
+  try {
+    const allUsers = await import_user_svc.default.index();
+    res.set("Content-Type", "application/json").send(JSON.stringify(allUsers));
+  } catch (err) {
+    res.status(500).send("Failed to load stories");
+  }
+});
+app.get("/users/:username", (req, res) => {
+  const { username } = req.params;
+  import_user_svc.default.get(username).then((data) => {
+    if (data) res.set("Content-Type", "application/json").send(JSON.stringify(data));
+    else res.status(404).send();
+  });
+});
+app.use(import_express.default.static(staticDir));

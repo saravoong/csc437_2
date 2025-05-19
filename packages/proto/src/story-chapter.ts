@@ -14,7 +14,15 @@ interface Chapter {
 }
 
 interface Story {
+    "img-src": string;
+    authorName: string;
+    genre: string;
+    chapterCount: number;
     storyTitle: string;
+    communityOrOfficial: string;
+    storyLink: string;
+    storyPath: string;
+    synopsis: string;
     chapters: Chapter[];
 }
 

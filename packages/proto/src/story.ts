@@ -6,9 +6,12 @@ import page from "./styles/page.css.ts";
 import stories from "./styles/stories.css.ts";
 
 interface Chapter {
+    storyTitle: string;
     chapterNumber: number;
     title: string;
-    url: string;
+    href: string;
+    summary: string;
+    comments: string[];
 }
 
 interface Story {
@@ -19,6 +22,7 @@ interface Story {
     storyTitle: string;
     communityOrOfficial: string;
     storyLink: string;
+    storyPath: string;
     synopsis: string;
     chapters: Chapter[];
 }

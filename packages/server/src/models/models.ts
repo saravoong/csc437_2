@@ -19,3 +19,9 @@ export interface Chapter {
     summary: string;
     comments: string[];
 }
+
+export interface User {
+    username: string;
+    profilePicture: string | undefined;
+    color: string | undefined;
+}

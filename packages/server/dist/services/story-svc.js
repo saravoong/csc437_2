@@ -25,13 +25,13 @@ var import_mongoose = require("mongoose");
 var import_chapter_svc = require("./chapter-svc");
 const StorySchema = new import_mongoose.Schema(
   {
-    "img-src": { type: String, required: true, trim: true },
+    "img-src": String,
     authorName: { type: String, required: true, trim: true },
-    genre: { type: String, required: true, trim: true },
+    genre: String,
     chapterCount: { type: Number, default: 0 },
     storyTitle: { type: String, required: true, trim: true },
     communityOrOfficial: { type: String, required: true, trim: true },
-    storyLink: { type: String, required: true, trim: true },
+    storyLink: String,
     storyPath: { type: String, required: true, trim: true },
     synopsis: String,
     chapters: [import_chapter_svc.ChapterSchema]
@@ -50,4 +50,37 @@ function get(storyPath) {
     throw `${storyPath} Not Found`;
   });
 }
-var story_svc_default = { index, get };
+function getChapter(storyPath, chapterNumber) {
+  return StoryModel.findOne({ storyPath }).then((story) => {
+    if (!story) {
+      throw new Error(`${storyPath} Not Found`);
+    }
+    const chapter = story.chapters.find((ch) => ch.chapterNumber === chapterNumber);
+    if (!chapter) {
+      throw new Error(`Chapter ${chapterNumber} not found in ${storyPath}`);
+    }
+    return chapter;
+  }).catch((err) => {
+    throw err.message;
+  });
+}
+function create(json) {
+  const t = new StoryModel(json);
+  return t.save();
+}
+function update(storyPath, story) {
+  return StoryModel.findOneAndUpdate({ storyPath }, story, {
+    new: true
+  }).then((updated) => {
+    if (!updated) throw `${storyPath} not updated`;
+    else return updated;
+  });
+}
+function remove(storyPath) {
+  return StoryModel.findOneAndDelete({ storyPath }).then(
+    (deleted) => {
+      if (!deleted) throw `${storyPath} not deleted`;
+    }
+  );
+}
+var story_svc_default = { index, get, getChapter, create, update, remove };

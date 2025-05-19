@@ -9,6 +9,8 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: resolve(__dirname, 'index.html'),
+                login: resolve(__dirname, 'login.html'),
+                newuser: resolve(__dirname, 'new-user.html'),
                 aligning_the_stars: resolve(__dirname, 'stories/aligning_the_stars/aligning_the_stars.html'),
                 aligning_the_stars_1: resolve(__dirname, 'stories/aligning_the_stars/chapters/01.html'),
                 aligning_the_stars_2: resolve(__dirname, 'stories/aligning_the_stars/chapters/02.html'),

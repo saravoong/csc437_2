@@ -18,7 +18,8 @@ var __copyProps = (to, from, except, desc) => {
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var chapter_svc_exports = {};
 __export(chapter_svc_exports, {
-  ChapterSchema: () => ChapterSchema
+  ChapterSchema: () => ChapterSchema,
+  default: () => chapter_svc_default
 });
 module.exports = __toCommonJS(chapter_svc_exports);
 var import_mongoose = require("mongoose");
@@ -26,7 +27,7 @@ const ChapterSchema = new import_mongoose.Schema(
   {
     storyTitle: { type: String, required: true, trim: true },
     chapterNumber: { type: Number, required: true },
-    title: { type: String, required: true, trim: true },
+    title: String,
     href: { type: String, required: true, trim: true },
     summary: String,
     comments: { type: [String], default: [] }
@@ -37,6 +38,15 @@ const ChapterModel = (0, import_mongoose.model)(
   "Chapter",
   ChapterSchema
 );
+function index() {
+  return ChapterModel.find();
+}
+function get(storyPath, chapterNumber) {
+  return ChapterModel.find({ storyPath, chapterNumber }).then((list) => list[0]).catch((err) => {
+    throw `${storyPath} Chapter ${chapterNumber} Not Found`;
+  });
+}
+var chapter_svc_default = { index, get };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   ChapterSchema
