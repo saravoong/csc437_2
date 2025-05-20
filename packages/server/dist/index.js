@@ -31,14 +31,14 @@ var import_mongo = require("./services/mongo");
 const app = (0, import_express.default)();
 const port = process.env.PORT || 3e3;
 (0, import_mongo.connect)("episode");
-const staticDir = process.env.STATIC || "public";
-console.log("Serving static files from ", staticDir);
-app.use(import_express.default.static(staticDir));
 app.use(import_express.default.raw({ type: "image/*", limit: "32Mb" }));
 app.use(import_express.default.json());
 app.use("/auth", import_auth.default);
 app.use("/api/stories", import_stories.default);
 app.use("/api/users", import_auth.authenticateUser, import_users.default);
+const staticDir = process.env.STATIC || "public";
+console.log("Serving static files from ", staticDir);
+app.use(import_express.default.static(staticDir));
 app.get("/ping", (_, res) => {
   res.send(
     `<h1>Hello!</h1>

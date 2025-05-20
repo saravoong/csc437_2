@@ -12,11 +12,6 @@ const port = process.env.PORT || 3000;
 // Mongo Connection
 connect("episode");
 
-// Static files
-const staticDir = process.env.STATIC || "public";
-console.log("Serving static files from ", staticDir);
-app.use(express.static(staticDir));
-
 // Middleware:
 app.use(express.raw({ type: "image/*", limit: "32Mb" }));
 app.use(express.json());
@@ -27,6 +22,11 @@ app.use("/auth", auth);
 // API Routes:
 app.use("/api/stories", stories);
 app.use("/api/users", authenticateUser, users);
+
+// Static files
+const staticDir = process.env.STATIC || "public";
+console.log("Serving static files from ", staticDir);
+app.use(express.static(staticDir));
 
 // Page Routes:
 app.get("/ping", (_: Request, res: Response) => {
