@@ -105,5 +105,3 @@ app.get("/users/:username", (req: Request, res: Response) => {
             .status(404).send();
     });
 });
-
-app.use(express.static(staticDir));

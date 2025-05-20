@@ -89,4 +89,3 @@ app.get("/users/:username", (req, res) => {
     else res.status(404).send();
   });
 });
-app.use(import_express.default.static(staticDir));
