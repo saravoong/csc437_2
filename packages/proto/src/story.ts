@@ -37,17 +37,6 @@ export class StoryTemplateElement extends LitElement {
     @state()
     private storyTitle: string = "";
 
-    connectedCallback() {
-        super.connectedCallback();
-        const title = this.getAttribute('data-title');
-        if (title) {
-            this.storyTitle = title;
-            if (this.src) {
-                this.hydrate(this.src, title);
-            }
-        }
-    }
-
     override render() {
         const selectedStory = this.stories.find(story => story.storyTitle === this.storyTitle);
 
@@ -129,17 +118,26 @@ export class StoryTemplateElement extends LitElement {
         `
     ];
 
+    connectedCallback() {
+        super.connectedCallback();
+        const title = this.getAttribute('data-title');
+        if (title) {
+            this.storyTitle = title;
+            if (this.src) {
+                this.hydrate(this.src, title);
+            }
+        }
+    }
+
     hydrate(src: string, title: string) {
         fetch(src)
             .then(res => res.json())
-            .then((json: { stories: Story[] }) => {
-                if (json && Array.isArray(json.stories)) {
-                    const selectedStory = json.stories.find(story => story.storyTitle === title);
-                    if (selectedStory) {
-                        this.stories = [selectedStory];
-                    } else {
-                        console.error(`Story with title "${title}" not found.`);
-                    }
+            .then((stories: Story[]) => {
+                const selectedStory = stories.find(story => story.storyTitle === title);
+                if (selectedStory) {
+                    this.stories = [selectedStory];
+                } else {
+                    console.error(`Story with title "${title}" not found.`);
                 }
             })
             .catch(err => console.error("Failed to fetch stories:", err));

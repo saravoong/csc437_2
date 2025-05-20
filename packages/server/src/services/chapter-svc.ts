@@ -1,4 +1,3 @@
-/*/ NOT NEEDED /*/
 import { Schema, model } from "mongoose";
 import {Chapter, Story} from "../models/models"
 

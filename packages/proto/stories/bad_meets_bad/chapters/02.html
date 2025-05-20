@@ -9,12 +9,22 @@
     <link rel="stylesheet" href="/styles/tokens.css" />
     <link rel="stylesheet" href="/styles/page.css" />
     <script type="module" src="../../../src/main.ts"></script>
+    <script type="module">
+        import { define, Auth } from "@calpoly/mustang";
+        import { ChapterTemplateElement } from "../../../src/story-chapter.ts";
+        define({
+            "chapter-template": ChapterTemplateElement,
+            "mu-auth": Auth.Provider,
+        });
+    </script>
 </head>
 <body>
-<chapter-template
-        src="/data/story.json"
-        data-title="Bad Meets Bad"
-        chapter-number="2">
-</chapter-template>
+<mu-auth provides="episode:auth">
+    <chapter-template
+            src="/api/stories"
+            data-title="Bad Meets Bad"
+            chapter-number="2">
+    </chapter-template>
+</mu-auth>
 </body>
 </html>

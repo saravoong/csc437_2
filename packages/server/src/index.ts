@@ -25,7 +25,7 @@ app.use(express.json());
 app.use("/auth", auth);
 
 // API Routes:
-app.use("/api/stories", authenticateUser, stories);
+app.use("/api/stories", stories);
 app.use("/api/users", authenticateUser, users);
 
 // Page Routes:

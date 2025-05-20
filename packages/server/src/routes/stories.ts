@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { Story } from "../models/models";
 import Stories from "../services/story-svc";
+import auth, { authenticateUser } from "./auth";
 
 const router = express.Router();
 
@@ -18,7 +19,15 @@ router.get("/:storyPath", (req: Request, res: Response) => {
         .catch((err) => res.status(404).send(err));
 });
 
-router.post("/", (req: Request, res: Response) => {
+router.get("/:storyPath/chapters/:chapterNumber", authenticateUser, (req: Request, res: Response) => {
+    const { storyPath, chapterNumber } = req.params;
+
+    Stories.getChapter(storyPath, Number(chapterNumber))
+        .then((chapter) => res.json(chapter))
+        .catch((err) => res.status(404).send(err));
+});
+
+router.post("/", authenticateUser, (req: Request, res: Response) => {
     const newStory = req.body;
 
     Stories.create(newStory)

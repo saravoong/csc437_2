@@ -33,6 +33,7 @@ __export(stories_exports, {
 module.exports = __toCommonJS(stories_exports);
 var import_express = __toESM(require("express"));
 var import_story_svc = __toESM(require("../services/story-svc"));
+var import_auth = require("./auth");
 const router = import_express.default.Router();
 router.get("/", (_, res) => {
   import_story_svc.default.index().then((list) => res.json(list)).catch((err) => res.status(500).send(err));
@@ -41,7 +42,11 @@ router.get("/:storyPath", (req, res) => {
   const { storyPath } = req.params;
   import_story_svc.default.get(storyPath).then((story) => res.json(story)).catch((err) => res.status(404).send(err));
 });
-router.post("/", (req, res) => {
+router.get("/:storyPath/chapters/:chapterNumber", import_auth.authenticateUser, (req, res) => {
+  const { storyPath, chapterNumber } = req.params;
+  import_story_svc.default.getChapter(storyPath, Number(chapterNumber)).then((chapter) => res.json(chapter)).catch((err) => res.status(404).send(err));
+});
+router.post("/", import_auth.authenticateUser, (req, res) => {
   const newStory = req.body;
   import_story_svc.default.create(newStory).then(
     (story) => res.status(201).json(story)

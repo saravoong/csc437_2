@@ -37,7 +37,7 @@ app.use(import_express.default.static(staticDir));
 app.use(import_express.default.raw({ type: "image/*", limit: "32Mb" }));
 app.use(import_express.default.json());
 app.use("/auth", import_auth.default);
-app.use("/api/stories", import_auth.authenticateUser, import_stories.default);
+app.use("/api/stories", import_stories.default);
 app.use("/api/users", import_auth.authenticateUser, import_users.default);
 app.get("/ping", (_, res) => {
   res.send(

@@ -3,6 +3,7 @@ import { property, state } from "lit/decorators.js";
 import reset from "./styles/reset.css.ts";
 import tokens from "./styles/tokens.css.ts";
 import page from "./styles/page.css.ts";
+import { Observer, Auth } from "@calpoly/mustang";
 
 interface Chapter {
     storyTitle: string;
@@ -42,22 +43,16 @@ export class ChapterTemplateElement extends LitElement {
     @property({ type: Number })
     chapterNumber: number = 0;
 
-    connectedCallback() {
-        super.connectedCallback();
-        const title = this.getAttribute('data-title');
-        const chapNum = this.getAttribute('chapter-number');
-        if (title && chapNum) {
-            this.storyTitle = title;
-            this.chapterNumber = Number(chapNum);
-            if (this.src) {
-                this.hydrate(this.src, title, Number(chapNum));
-            }
-        }
-    }
-
     override render() {
         if (!this.selectedChapter) {
-            return html`<p>Loading chapter=...</p>`;
+            return html`
+          <p>Please login or make an account</p>
+          <button @click=${() => {
+                    window.location.href = "/login.html";
+                }}>
+            Sign In
+          </button>
+        `;
         }
 
         const currentUrl = window.location.pathname;
@@ -89,12 +84,43 @@ export class ChapterTemplateElement extends LitElement {
         `
     ];
 
+    _authObserver = new Observer<Auth.Model>(this, "episode:auth");
+    _user?: Auth.User;
+
+    connectedCallback() {
+        super.connectedCallback();
+        const title = this.getAttribute('data-title');
+        const chapNum = this.getAttribute('chapter-number');
+
+        this.storyTitle = title || '';
+        this.chapterNumber = chapNum ? Number(chapNum) : 0;
+
+        this._authObserver.observe((auth: Auth.Model) => {
+            this._user = auth.user;
+            if (this._user && this._user.authenticated && this.src && this.storyTitle && this.chapterNumber) {
+                this.hydrate(this.src, this.storyTitle, this.chapterNumber);
+            }
+        });
+    }
+
+    get authorization(): { Authorization?: string } {
+        if (this._user && this._user.authenticated)
+            return {
+                Authorization:
+                    `Bearer ${(this._user as Auth.AuthenticatedUser).token}`
+            };
+        else return {};
+    }
+
     hydrate(src: string, title: string, chapterNum: number) {
-        fetch(src)
+        fetch(
+            src,
+            { headers: this.authorization }
+        )
             .then(res => res.json())
-            .then((json: { stories: Story[] }) => {
-                console.log("Fetched stories:", json);
-                const story = json.stories.find(s => s.storyTitle === title);
+            .then((stories: Story[]) => {
+                console.log("Fetched stories:", stories);
+                const story = stories.find(s => s.storyTitle === title);
                 if (!story) {
                     console.error(`Story with title "${title}" not found.`);
                     return;

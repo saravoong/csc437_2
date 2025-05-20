@@ -9,14 +9,19 @@
     <link rel="stylesheet" href="/styles/tokens.css" />
     <link rel="stylesheet" href="/styles/page.css" />
     <link rel="stylesheet" href="/styles/stories.css" />
-    <script type="module" src="../../src/main.ts"></script>
+    <script type="module">
+        import { define, Auth } from "@calpoly/mustang";
+        import { StoryTemplateElement } from "../../src/story.ts";
+
+        define({
+            "story-template": StoryTemplateElement,
+            "mu-auth": Auth.Provider,
+        });
+    </script>
 </head>
 <body>
-
-<story-template src="/data/story.json"
+<story-template src="/api/stories"
                 data-title="Rule Breaker">
 </story-template>
-
 </body>
 </html>
-
