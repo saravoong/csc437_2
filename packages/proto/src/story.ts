@@ -100,16 +100,45 @@ export class StoryTemplateElement extends LitElement {
     `;
     }
 
+    override updated() {
+        const selectedStory = this.stories.find(story => story.storyTitle === this.storyTitle);
+        if (selectedStory) {
+            const genreColorMap: Record<string, string> = {
+                Romance: "hotpink",
+                Drama: "darkslategray",
+                LGBTQ: "mediumorchid",
+                Fantasy: "rebeccapurple",
+                SciFi: "deepskyblue",
+                Mystery: "darkslateblue",
+                Comedy: "goldenrod",
+                Action: "firebrick",
+                Adventure: "teal",
+                Thriller: "indigo",
+                Horror: "crimson",
+            };
+            const genreColor = genreColorMap[selectedStory.genre] || "steelblue";
+            this.style.setProperty("--accent-color", genreColor);
+        }
+    }
+
     static styles = [
         reset.styles,
         page.styles,
         tokens.styles,
         stories.styles,
         css`
+            :host {
+                --accent-color: steelblue;
+            }
+            a {
+                color: var(--accent-color);
+                font-weight: bold;
+            }
             h1 {
                 font-size: 2rem;
+                border-bottom: 2px solid var(--accent-color);
+                padding-bottom: 0.25em;
             }
-            
             ul {
                 list-style-type: disc;
                 margin-left: 1.5em;

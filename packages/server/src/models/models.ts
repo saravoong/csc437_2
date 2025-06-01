@@ -20,7 +20,7 @@ export interface Chapter {
     comments: string[];
 }
 
-export interface User {
+export interface Reader {
     username: string;
     profilePicture: string | undefined;
     color: string | undefined;

@@ -2,6 +2,11 @@
   "name": "proto",
   "version": "1.0.0",
   "main": "index.html",
+  "exports": {
+    "./models": {
+      "import": "./src/models/index.ts"
+    }
+  },
   "scripts": {
     "dev": "npx vite",
     "build": "npx tsc && npx vite build",

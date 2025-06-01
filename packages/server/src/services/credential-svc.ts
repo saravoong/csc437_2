@@ -66,4 +66,5 @@ function create(username: string, password: string): Promise<Credential> {
         );
 }
 
+export { credentialModel };
 export default { create, verify };

@@ -5,6 +5,7 @@ import express, {
     Response
 } from "express";
 import jwt from "jsonwebtoken";
+import Readers from "../services/user-svc";
 
 import credentials from "../services/credential-svc";
 
@@ -40,6 +41,15 @@ router.post("/register", (req: Request, res: Response) => {
     } else {
         credentials
             .create(username, password)
+            .then((creds) => {
+                // Step 1: Credentials created
+                // Step 2: Create profile entry
+                return Readers.create({
+                    username: creds.username,
+                    profilePicture: "",
+                    color: "#cccccc"
+                });
+            })
             .then((creds) => generateAccessToken(creds.username))
             .then((token) => {
                 res.status(201).send({ token: token });

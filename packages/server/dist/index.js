@@ -22,10 +22,10 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var import_express = __toESM(require("express"));
+var import_promises = __toESM(require("node:fs/promises"));
+var import_path = __toESM(require("path"));
 var import_auth = __toESM(require("./routes/auth"));
-var import_story_svc = __toESM(require("./services/story-svc"));
 var import_stories = __toESM(require("./routes/stories"));
-var import_user_svc = __toESM(require("./services/user-svc"));
 var import_users = __toESM(require("./routes/users"));
 var import_mongo = require("./services/mongo");
 const app = (0, import_express.default)();
@@ -35,7 +35,7 @@ app.use(import_express.default.raw({ type: "image/*", limit: "32Mb" }));
 app.use(import_express.default.json());
 app.use("/auth", import_auth.default);
 app.use("/api/stories", import_stories.default);
-app.use("/api/users", import_auth.authenticateUser, import_users.default);
+app.use("/api/profiles", import_users.default);
 const staticDir = process.env.STATIC || "public";
 console.log("Serving static files from ", staticDir);
 app.use(import_express.default.static(staticDir));
@@ -47,45 +47,12 @@ app.get("/ping", (_, res) => {
     `
   );
 });
+app.use("/app", (req, res) => {
+  const indexHtml = import_path.default.resolve(staticDir, "index.html");
+  import_promises.default.readFile(indexHtml, { encoding: "utf8" }).then(
+    (html) => res.send(html)
+  );
+});
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
-});
-app.get("/stories", async (req, res) => {
-  try {
-    const allStories = await import_story_svc.default.index();
-    res.set("Content-Type", "application/json").send(JSON.stringify(allStories));
-  } catch (err) {
-    res.status(500).send("Failed to load stories");
-  }
-});
-app.get("/stories/:storyPath", (req, res) => {
-  const { storyPath } = req.params;
-  import_story_svc.default.get(storyPath).then((data) => {
-    if (data) res.set("Content-Type", "application/json").send(JSON.stringify(data));
-    else res.status(404).send();
-  });
-});
-app.get("/stories/:storyPath/chapters/:chapterNumber", (req, res) => {
-  const { storyPath, chapterNumber } = req.params;
-  const chapterNum = Number(chapterNumber);
-  import_story_svc.default.getChapter(storyPath, chapterNum).then((data) => {
-    res.set("Content-Type", "application/json").send(JSON.stringify(data));
-  }).catch((err) => {
-    res.status(404).send(err);
-  });
-});
-app.get("/users", async (req, res) => {
-  try {
-    const allUsers = await import_user_svc.default.index();
-    res.set("Content-Type", "application/json").send(JSON.stringify(allUsers));
-  } catch (err) {
-    res.status(500).send("Failed to load stories");
-  }
-});
-app.get("/users/:username", (req, res) => {
-  const { username } = req.params;
-  import_user_svc.default.get(username).then((data) => {
-    if (data) res.set("Content-Type", "application/json").send(JSON.stringify(data));
-    else res.status(404).send();
-  });
 });

@@ -1,7 +1,8 @@
 import { Schema, model } from "mongoose";
-import { User } from "../models/models";
+import { Reader } from "../models/models";
+import { credentialModel } from "./credential-svc";
 
-const UserSchema = new Schema<User>(
+const UserSchema = new Schema<Reader>(
     {
         username: { type: String, required: true, trim: true },
         profilePicture: String,
@@ -10,16 +11,16 @@ const UserSchema = new Schema<User>(
     { collection: "users" }
 );
 
-const UserModel = model<User>(
+const UserModel = model<Reader>(
     "User",
     UserSchema
 );
 
-function index(): Promise<User[]> {
+function index(): Promise<Reader[]> {
     return UserModel.find();
 }
 
-function get(username: String): Promise<User> {
+function get(username: String): Promise<Reader> {
     return UserModel.find({ username })
         .then((list) => list[0])
         .catch((err) => {
@@ -27,21 +28,40 @@ function get(username: String): Promise<User> {
         });
 }
 
-function create(json: User): Promise<User> {
+function create(json: Reader): Promise<Reader> {
     const t = new UserModel(json);
     return t.save();
 }
 
-function update(
-    username: String,
-    user: User
-): Promise<User> {
-    return UserModel.findOneAndUpdate({ username }, user, {
-        new: true
-    }).then((updated) => {
-        if (!updated) throw `${username} not updated`;
-        else return updated as User;
-    });
+async function update(username: String, user: Reader): Promise<Reader> {
+    const existingUser = await UserModel.findOne({ username });
+    if (!existingUser) {
+        throw `${username} not found`;
+    }
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+        { username },
+        user,
+        { new: true }
+    );
+
+    if (!updatedUser) {
+        throw `${username} not updated`;
+    }
+
+    // Update credentials if username has changed
+    if (user.username && user.username !== username) {
+        const credUpdate = await credentialModel.findOneAndUpdate(
+            { username },
+            { username: user.username }
+        );
+
+        if (!credUpdate) {
+            throw `Could not update credentials for ${username}`;
+        }
+    }
+
+    return updatedUser;
 }
 
 function remove(username: String): Promise<void> {

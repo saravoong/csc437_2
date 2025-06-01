@@ -22,6 +22,7 @@ __export(user_svc_exports, {
 });
 module.exports = __toCommonJS(user_svc_exports);
 var import_mongoose = require("mongoose");
+var import_credential_svc = require("./credential-svc");
 const UserSchema = new import_mongoose.Schema(
   {
     username: { type: String, required: true, trim: true },
@@ -46,13 +47,29 @@ function create(json) {
   const t = new UserModel(json);
   return t.save();
 }
-function update(username, user) {
-  return UserModel.findOneAndUpdate({ username }, user, {
-    new: true
-  }).then((updated) => {
-    if (!updated) throw `${username} not updated`;
-    else return updated;
-  });
+async function update(username, user) {
+  const existingUser = await UserModel.findOne({ username });
+  if (!existingUser) {
+    throw `${username} not found`;
+  }
+  const updatedUser = await UserModel.findOneAndUpdate(
+    { username },
+    user,
+    { new: true }
+  );
+  if (!updatedUser) {
+    throw `${username} not updated`;
+  }
+  if (user.username && user.username !== username) {
+    const credUpdate = await import_credential_svc.credentialModel.findOneAndUpdate(
+      { username },
+      { username: user.username }
+    );
+    if (!credUpdate) {
+      throw `Could not update credentials for ${username}`;
+    }
+  }
+  return updatedUser;
 }
 function remove(username) {
   return UserModel.findOneAndDelete({ username }).then(

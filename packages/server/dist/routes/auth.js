@@ -35,6 +35,7 @@ module.exports = __toCommonJS(auth_exports);
 var import_dotenv = __toESM(require("dotenv"));
 var import_express = __toESM(require("express"));
 var import_jsonwebtoken = __toESM(require("jsonwebtoken"));
+var import_user_svc = __toESM(require("../services/user-svc"));
 var import_credential_svc = __toESM(require("../services/credential-svc"));
 const router = import_express.default.Router();
 import_dotenv.default.config();
@@ -57,7 +58,13 @@ router.post("/register", (req, res) => {
   if (typeof username !== "string" || typeof password !== "string") {
     res.status(400).send("Bad request: Invalid input data.");
   } else {
-    import_credential_svc.default.create(username, password).then((creds) => generateAccessToken(creds.username)).then((token) => {
+    import_credential_svc.default.create(username, password).then((creds) => {
+      return import_user_svc.default.create({
+        username: creds.username,
+        profilePicture: "",
+        color: "#cccccc"
+      });
+    }).then((creds) => generateAccessToken(creds.username)).then((token) => {
       res.status(201).send({ token });
     }).catch((err) => {
       res.status(409).send({ error: err.message });

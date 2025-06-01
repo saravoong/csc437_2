@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Episode</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oleo+Script:wght@400;700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/tokens.css" />
+    <link rel="stylesheet" href="/styles/page.css" />
+  <script type="module" crossorigin src="/assets/main-BF7pugyk.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/reset.css-C8x1Zwsv.js">
+</head>
+
+<body>
+    <mu-history provides="episode:history">
+        <mu-auth provides="episode:auth" redirect="/login.html">
+            <mu-store provides="episode:model">
+                <article class="page">
+                    <epi-header></epi-header>
+                    <mu-switch></mu-switch>
+                </article>
+                </mu-store>
+        </mu-auth>
+    </mu-history>
+</body>
+
+</html>
