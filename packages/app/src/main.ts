@@ -14,6 +14,7 @@ import { HomeViewElement } from "./views/home-view";
 import { StoryViewElement } from "./views/story-view.ts";
 import { ChapterViewElement } from "./views/chapter-view.ts";
 import { ReaderViewElement } from "./views/reader-view.ts";
+import { ReaderEditElement } from "./views/reader-edit.ts";
 
 const routes: Switch.Route[] = [
     {
@@ -34,18 +35,18 @@ const routes: Switch.Route[] = [
     },
     {
         auth: "protected",
-        path: "/app/profile/:id",
+        path: "/app/profiles/:username/edit",
+        view: (params: Switch.Params) => html`
+    <reader-edit username=${params.username}></reader-edit>`
+    },
+    {
+        auth: "protected",
+        path: "/app/profiles/:username",
         view: (
-            params: Switch.Params,
-            query?: URLSearchParams
+            params: Switch.Params
         ) => html`
       <reader-view
-        username=${params.id}
-        mode=${query?.has("edit")
-            ? "edit"
-            : query?.has("new")
-                ? "new"
-                : "view"}></reader-view>
+        username=${params.username}></reader-view>
     `
     },
     {
@@ -72,12 +73,13 @@ define({
         extends Store.Provider<Model, Msg>
     {
         constructor() {
-            super(update, init, "blazing:auth");
+            super(update, init, "episode:auth");
         }
     },
     "episode-header": HeaderElement,
     "home-view": HomeViewElement,
     "story-view": StoryViewElement,
     "chapter-view": ChapterViewElement,
-    "reader-view": ReaderViewElement
+    "reader-view": ReaderViewElement,
+    "reader-edit": ReaderEditElement
 });

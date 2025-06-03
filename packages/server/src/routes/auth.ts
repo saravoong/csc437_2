@@ -78,7 +78,6 @@ router.get('/login', (req, res) => {
     res.send('Login route is reachable by GET');
 });
 
-
 export function authenticateUser(
     req: Request,
     res: Response,

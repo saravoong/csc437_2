@@ -3,12 +3,15 @@ import {
     define,
     Dropdown,
     Events,
-    Observer
+    Observer,
+    View
 } from "@calpoly/mustang";
-import { css, html, LitElement } from "lit";
+import { css, html } from "lit";
 import { state } from "lit/decorators.js";
 import headings from "../styles/headings.css.ts";
 import reset from "../styles/reset.css.ts";
+import { Model } from "../model.ts";
+import { Msg } from "../messages.ts";
 
 function toggleDarkMode(ev: InputEvent) {
     const target = ev.target as HTMLInputElement;
@@ -21,7 +24,7 @@ function signOut(ev: MouseEvent) {
     Events.relay(ev, "auth:message", ["auth/signout"]);
 }
 
-export class HeaderElement extends LitElement {
+export class HeaderElement extends View<Model, Msg> {
     static uses = define({
         "mu-dropdown": Dropdown.Element
     });
@@ -32,7 +35,15 @@ export class HeaderElement extends LitElement {
     @state()
     username?: string = "episodian";
 
+    constructor() {
+        super("episode:model");
+    }
+
     protected render() {
+        const displayName =
+            this.username ||
+            "episodian";
+
         return html`
             <header class="front-page-header">
                 <div class="left-group">
@@ -45,10 +56,10 @@ export class HeaderElement extends LitElement {
                 </div>
 
                 <mu-dropdown>
-                    <a href="/app/profile/${this.username}">
+                    <a href="/app/profiles/${this.username}">
                         View Profile
                     </a>
-                    <a slot="actuator">Hello, <b>${this.username || "episodian"}</b></a>
+                    <a slot="actuator">Hello, <b>${displayName}</b></a>
                     <menu>
                         <li class="when-signed-in">
                             <a id="signout" @click=${signOut}>Sign Out</a>
@@ -90,6 +101,8 @@ export class HeaderElement extends LitElement {
             if (user && user.authenticated ) {
                 this.loggedIn = true;
                 this.username = user.username;
+
+                this.dispatchMessage(["profile/select", {username: this.username}]);
             } else {
                 this.loggedIn = false;
                 this.username = undefined;
