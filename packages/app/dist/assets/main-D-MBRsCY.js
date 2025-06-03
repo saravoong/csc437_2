@@ -1,4 +1,4 @@
-import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f as x,n as h,h as f,g as D,s as A,_ as I}from"./reset.css-BPlqXxCa.js";const R={};function U(r,e,t){switch(r[0]){case"profile/save":E(r[1],t).then(s=>e(i=>({...i,profile:s}))).then(()=>{const{onSuccess:s}=r[1];s&&s()}).catch(s=>{const{onFailure:i}=r[1];i&&i(s)});break;case"profile/select":J(r[1],t).then(s=>e(i=>({...i,profile:s})));break;default:const o=r[0];throw new Error(`Unhandled message "${o}"`)}}function J(r,e){return fetch(`/api/profiles/${r.username}`,{headers:C.headers(e)}).then(async t=>{if(!t.ok){console.warn(`Profile fetch failed with status ${t.status}`);return}const o=await t.text();if(!o){console.warn(`Empty response for user ${r.username}`);return}try{return JSON.parse(o)}catch{console.error(`Failed to parse JSON for ${r.username}:`,o);return}})}function E(r,e){return fetch(`/api/profiles/${r.username}`,{method:"PUT",headers:{"Content-Type":"application/json",...C.headers(e)},body:JSON.stringify(r.profile)}).then(t=>{if(t.status===200)return t.json();throw new Error(`Failed to save profile for ${r.username}`)}).then(t=>{if(t)return t})}/**
+import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f as x,n as h,h as f,g as D,s as A,_ as I}from"./reset.css-BPlqXxCa.js";const U={};function R(r,e,t){switch(r[0]){case"profile/save":E(r[1],t).then(s=>e(i=>({...i,profile:s}))).then(()=>{const{onSuccess:s}=r[1];s&&s()}).catch(s=>{const{onFailure:i}=r[1];i&&i(s)});break;case"profile/select":J(r[1],t).then(s=>e(i=>({...i,profile:s})));break;default:const o=r[0];throw new Error(`Unhandled message "${o}"`)}}function J(r,e){return fetch(`/api/profiles/${r.username}`,{headers:C.headers(e)}).then(async t=>{if(!t.ok){console.warn(`Profile fetch failed with status ${t.status}`);return}const o=await t.text();if(!o){console.warn(`Empty response for user ${r.username}`);return}try{return JSON.parse(o)}catch{console.error(`Failed to parse JSON for ${r.username}:`,o);return}})}function E(r,e){return fetch(`/api/profiles/${r.username}`,{method:"PUT",headers:{"Content-Type":"application/json",...C.headers(e)},body:JSON.stringify(r.profile)}).then(t=>{if(t.status===200)return t.json();throw new Error(`Failed to save profile for ${r.username}`)}).then(t=>{if(t)return t})}/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
@@ -447,7 +447,7 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
                 @mu-form:submit=${this.handleSubmit}>
                 <label>
                     <span>Username</span>
-                    <input name="username" .value=${this.profile.username} />
+                    
                 </label>
                 <label>
                     <span>Avatar</span>
@@ -459,7 +459,7 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
                 </label>
             </mu-form>
         </main>
-    `:n`<p>Loading...</p>`}constructor(){super("episode:model")}attributeChangedCallback(e,t,o){super.attributeChangedCallback(e,t,o),e==="username"&&t!==o&&o&&this.dispatchMessage(["profile/select",{username:o}])}handleSubmit(e){this.dispatchMessage(["profile/save",{username:this.username,profile:e.detail,onSuccess:()=>{f.dispatch(this,"history/navigate",{href:"/app"})},onFailure:t=>console.log("ERROR:",t)}])}firstUpdated(){this.username&&this.dispatchMessage(["profile/select",{username:this.username}])}};w.uses=P({"mu-form":D.Element}),w.styles=[$.styles,c`
+    `:n`<p>Loading...</p>`}constructor(){super("episode:model")}attributeChangedCallback(e,t,o){super.attributeChangedCallback(e,t,o),e==="username"&&t!==o&&o&&this.dispatchMessage(["profile/select",{username:o}])}handleSubmit(e){if(!this.username){console.error("Username is not set, cannot save profile.");return}this.dispatchMessage(["profile/save",{username:this.username,profile:e.detail,onSuccess:()=>{f.dispatch(this,"history/navigate",{href:`/app/profiles/${this.username}`})},onFailure:t=>console.log("ERROR:",t)}])}firstUpdated(){this.username&&this.dispatchMessage(["profile/select",{username:this.username}])}};w.uses=P({"mu-form":D.Element}),w.styles=[$.styles,c`
       :host {
         display: contents;
         grid-column: 2/-2;
@@ -512,4 +512,4 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
         username=${r.username}></reader-view>
     `},{path:"/app",view:()=>n`
       <home-view></home-view>
-    `},{path:"/",redirect:"/app"}];P({"mu-auth":C.Provider,"mu-history":f.Provider,"mu-switch":class extends I.Element{constructor(){super(se,"episode:history","episode:auth")}},"mu-store":class extends A.Provider{constructor(){super(U,R,"episode:auth")}},"episode-header":u,"home-view":v,"story-view":p,"chapter-view":l,"reader-view":g,"reader-edit":m});
+    `},{path:"/",redirect:"/app"}];P({"mu-auth":C.Provider,"mu-history":f.Provider,"mu-switch":class extends I.Element{constructor(){super(se,"episode:history","episode:auth")}},"mu-store":class extends A.Provider{constructor(){super(R,U,"episode:auth")}},"episode-header":u,"home-view":v,"story-view":p,"chapter-view":l,"reader-view":g,"reader-edit":m});

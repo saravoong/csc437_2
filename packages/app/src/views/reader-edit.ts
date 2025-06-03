@@ -36,7 +36,7 @@ export class ReaderEditElement extends View<Model, Msg> {
                 @mu-form:submit=${this.handleSubmit}>
                 <label>
                     <span>Username</span>
-                    <input name="username" .value=${this.profile.username} />
+                    
                 </label>
                 <label>
                     <span>Avatar</span>
@@ -116,14 +116,20 @@ export class ReaderEditElement extends View<Model, Msg> {
     }
 
     handleSubmit(event: Form.SubmitEvent<Reader>) {
+        if (!this.username) {
+            console.error("Username is not set, cannot save profile.");
+            return;
+        }
+
         this.dispatchMessage([
             "profile/save",
             {
-                username: this.username!,
+                username: this.username,
                 profile: event.detail,
                 onSuccess: () => {
                     History.dispatch(this, "history/navigate", {
-                        href: "/app"
+                        href: `/app/profiles/${this.username}`
+                        /*href: `/app/profiles/${event.detail.username}`*/
                     });
                 },
                 onFailure: (error: Error) =>
@@ -137,6 +143,7 @@ export class ReaderEditElement extends View<Model, Msg> {
             this.dispatchMessage(["profile/select", { username: this.username }]);
         }
     }
+
 
 
 }
