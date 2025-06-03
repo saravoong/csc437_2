@@ -143,7 +143,4 @@ export class ReaderEditElement extends View<Model, Msg> {
             this.dispatchMessage(["profile/select", { username: this.username }]);
         }
     }
-
-
-
 }
