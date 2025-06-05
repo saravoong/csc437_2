@@ -2,61 +2,128 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <link
-            rel="preconnect"
-            href="https://fonts.googleapis.com" />
-    <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com"
-            crossorigin />
-    <link
-            href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,200;0,400;0,700;1,700&family=Merriweather:wght@400;700&display=swap"
-            rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Comfortaa:wght@300..700&family=Great+Vibes&display=swap" rel="stylesheet">
+
 
     <style>
-        .page {
+        body {
+            margin: 0;
             height: 100vh;
-            grid-template-rows: 1fr fit-content(1fr) 1fr;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f8feff;
+            font-family: "Comfortaa", sans-serif;
+            color: #1a1a40ff
         }
 
-        main.card {
-            align-self: center;
-            grid-column: 3 / span 4;
+        .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
         }
 
         h2 {
-            grid-column: start / end;
-            align-self: end;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        login-form label {
+            display: flex;
+            flex-direction: column;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        login-form input {
+            padding: 0.6rem 0.8rem;
+            margin-top: 0.3rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-family: inherit;
         }
 
         p {
-            grid-column: 2 / -2;
             text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #555;
         }
+
+        a {
+            color: #2b7ae4;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .login-header {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+        }
+
+        .logo-link {
+            font-family: "Oleo Script", system-ui;
+            font-size: 1.8rem;
+            color: #222;
+            text-decoration: none;
+        }
+
+        .logo-link:hover {
+            text-decoration: underline;
+        }
+
+        .logo-img {
+            height: 4rem;
+            vertical-align: middle;
+        }
+
     </style>
-  <script type="module" crossorigin src="/assets/login-DltOQ5Ae.js"></script>
+  <script type="module" crossorigin src="/assets/login-DS7okqbs.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/reset.css-BPlqXxCa.js">
-  <link rel="modulepreload" crossorigin href="/assets/login-form-DHnBbNCv.js">
+  <link rel="modulepreload" crossorigin href="/assets/login-form-DMERqVuB.js">
 </head>
-<body class="page">
+
+<body>
 <mu-auth>
-    <h2>User Login</h2>
+    <h1 class="login-header">
+        <a href="/app" class="logo-link">
+            <img src="/assets/logo-gDG62V0D.png" alt="Episodian World Logo" class="logo-img" />
+        </a>
+    </h1>
     <main class="card">
+        <h2><b>Sign in</b></h2>
         <login-form api="/auth/login">
             <label>
-                <span>Username:</span>
+                <span>Username</span>
                 <input name="username" autocomplete="off" />
             </label>
             <label>
-                <span>Password:</span>
+                <span>Password</span>
                 <input type="password" name="password" />
             </label>
+            <span slot="button-label">Create Account</span>
         </login-form>
+        <p>New to EpisodianWorld? <a href="new-user.html"><b>Join now</b></a>?</p>
     </main>
-    <p
-    >Or did you want to
-        <a href="new-user.html">Sign up as a new user</a>?
-    </p>
 </mu-auth>
 </body>
 </html>

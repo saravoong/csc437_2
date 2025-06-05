@@ -8,8 +8,10 @@ import {
 } from "@calpoly/mustang";
 import { css, html } from "lit";
 import { state } from "lit/decorators.js";
-import headings from "../styles/headings.css.ts";
 import reset from "../styles/reset.css.ts";
+import headings from "../styles/headings.css.ts";
+import page from "../styles/page.css.ts";
+import tokens from "../styles/tokens.css.ts";
 import { Model } from "../model.ts";
 import { Msg } from "../messages.ts";
 
@@ -35,32 +37,45 @@ export class HeaderElement extends View<Model, Msg> {
     @state()
     username?: string = "episodian";
 
+    @state()
+    get profile() {
+        return this.model.profile;
+    }
+
     constructor() {
         super("episode:model");
     }
 
     protected render() {
-        const displayName =
-            this.username ||
-            "episodian";
+        const displayName = this.username || "episodian";
+        const profilePicture = this.profile?.profilePicture || "/assets/profile.jpg";
+        const color = this.profile?.color || "#ccc";
 
         return html`
             <header class="front-page-header">
                 <div class="left-group">
-                    <h1 class="Episode-logo">Episode</h1>
-                    <p>For all the Episode fans out there!</p>
-                    <label @change=${toggleDarkMode}>
-                        <input type="checkbox" />
-                        Dark Mode
-                    </label>
+                    <img src="/assets/logo.png" alt="Episode Logo" class="logo" />
                 </div>
 
                 <mu-dropdown>
-                    <a href="/app/profiles/${this.username}">
-                        View Profile
-                    </a>
-                    <a slot="actuator">Hello, <b>${displayName}</b></a>
+                    <img
+                            slot="actuator"
+                            src=${profilePicture}
+                            alt="Profile Picture"
+                            class="profile-pic"
+                            style="border: 2px solid ${color}"
+                    />
                     <menu>
+                        <li class="user-name"><b>${displayName}</b></li>
+                        <li>
+                            <a href="/app/profiles/${this.username}">View Profile</a>
+                        </li>
+                        <li>
+                            <label class="dark-toggle">
+                                <input type="checkbox" @change=${toggleDarkMode} />
+                                Dark Mode
+                            </label>
+                        </li>
                         <li class="when-signed-in">
                             <a id="signout" @click=${signOut}>Sign Out</a>
                         </li>
@@ -69,22 +84,59 @@ export class HeaderElement extends View<Model, Msg> {
                         </li>
                     </menu>
                 </mu-dropdown>
-            </header>`;
+            </header>
+        `;
     }
 
     static styles = [
         reset.styles,
+        page.styles,
+        tokens.styles,
         headings.styles,
         css`
             .front-page-header {
-                position: relative; /* Needed for absolute positioning inside */
-                padding-right: 3rem; /* space so dropdown doesn't overlap content */
+                background-color: #eeeef6ff;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0.5rem 1.5rem;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                border-bottom: 4px solid white; 
+                position: relative;
+                z-index: 10;
+            }
+
+            .logo {
+                height: 40px;
             }
 
             mu-dropdown {
-                position: absolute;
-                top: 0.5rem;
-                right: 1rem;
+                position: relative;
+            }
+
+            .profile-pic {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+                padding: 4px;
+                background-color: white;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+                cursor: pointer;
+            }
+
+            menu {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.75rem;
+            }
+
+            .dark-toggle {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-size: 0.9rem;
             }
         `
     ];

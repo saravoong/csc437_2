@@ -6,6 +6,7 @@ import Stories from "./services/story-svc";
 import stories from "./routes/stories";
 import Users from "./services/user-svc";
 import users from "./routes/users";
+import { getFile, saveFile } from "./services/filesystem";
 import { connect } from "./services/mongo";
 
 const app = express();
@@ -24,6 +25,10 @@ app.use("/auth", auth);
 // API Routes:
 app.use("/api/stories", stories);
 app.use("/api/profiles", users);
+
+// Image routes
+app.post("/images", saveFile);
+app.get("/images/:id", getFile);
 
 // Static files
 const staticDir = process.env.STATIC || "public";

@@ -24,10 +24,15 @@ export class ReaderEditElement extends View<Model, Msg> {
         return this.model.profile;
     }
 
+    @state()
+    image? = this.profile?.profilePicture;
+
     render() {
         if (!this.profile) {
-            return html`<p>Loading...</p>`;
+            return html`<p>Profile does not exist, please go back to the <a href="/app">homepage</a></p>`;
         }
+
+        const imageUrl = this.image || this.profile?.profilePicture || "/assets/default.jpg";
 
         return html`
         <main class="page">
@@ -36,11 +41,13 @@ export class ReaderEditElement extends View<Model, Msg> {
                 @mu-form:submit=${this.handleSubmit}>
                 <label>
                     <span>Username</span>
-                    
                 </label>
                 <label>
-                    <span>Avatar</span>
-                    <input type="file" name="profilePicture" />
+                    <span>Featured Image</span>
+                    <img src=${imageUrl} class="preview-pic" alt="Preview" />
+                    <input
+                            type="file"
+                            @change=${this._handleFileSelected} />
                 </label>
                 <label>
                     <span>Color</span>
@@ -121,11 +128,16 @@ export class ReaderEditElement extends View<Model, Msg> {
             return;
         }
 
+        const profileData = {
+            ...event.detail,
+            profilePicture: this.image
+        };
+
         this.dispatchMessage([
             "profile/save",
             {
                 username: this.username,
-                profile: event.detail,
+                profile: profileData,
                 onSuccess: () => {
                     History.dispatch(this, "history/navigate", {
                         href: `/app/profiles/${this.username}`
@@ -142,5 +154,49 @@ export class ReaderEditElement extends View<Model, Msg> {
         if (this.username) {
             this.dispatchMessage(["profile/select", { username: this.username }]);
         }
+    }
+
+    _handleFileSelected(ev: Event) {
+        const target = ev.target as HTMLInputElement;
+        const selectedFile = (target.files as FileList)[0];
+
+        const reader: Promise<ArrayBuffer> = new Promise(
+            (resolve, reject) => {
+                const fr = new FileReader();
+                fr.onload = () => resolve(fr.result as ArrayBuffer);
+                fr.onerror = (err) => reject(err);
+                fr.readAsArrayBuffer(selectedFile);
+            }
+        );
+
+        reader.then((buffer: ArrayBuffer) => {
+            const { name, size, type } = selectedFile;
+            const query = new URLSearchParams({ filename: name });
+            const url = new URL("/images", document.location.origin);
+            url.search = query.toString();
+
+            console.log("Uploading file:", selectedFile);
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": type,
+                    "Content-Length": size.toString()
+                },
+                body: buffer
+            })
+                .then((res) => {
+                    if (res.status === 201) return res.json();
+                    else throw res.status;
+                })
+                .then((json: { url: string } | undefined) => {
+                    if (json) {
+                        console.log("Image has been uploaded to", json.url);
+                        this.image = json.url;
+                    } else throw "No JSON response";
+                })
+                .catch((error) => {
+                    console.log("Upload failed", error);
+                });
+        });
     }
 }

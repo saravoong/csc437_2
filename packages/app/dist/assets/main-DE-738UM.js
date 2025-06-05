@@ -1,8 +1,8 @@
-import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f as x,n as h,h as f,g as D,s as A,_ as I}from"./reset.css-BPlqXxCa.js";const U={};function R(r,e,t){switch(r[0]){case"profile/save":E(r[1],t).then(s=>e(i=>({...i,profile:s}))).then(()=>{const{onSuccess:s}=r[1];s&&s()}).catch(s=>{const{onFailure:i}=r[1];i&&i(s)});break;case"profile/select":J(r[1],t).then(s=>e(i=>({...i,profile:s})));break;default:const o=r[0];throw new Error(`Unhandled message "${o}"`)}}function J(r,e){return fetch(`/api/profiles/${r.username}`,{headers:C.headers(e)}).then(async t=>{if(!t.ok){console.warn(`Profile fetch failed with status ${t.status}`);return}const o=await t.text();if(!o){console.warn(`Empty response for user ${r.username}`);return}try{return JSON.parse(o)}catch{console.error(`Failed to parse JSON for ${r.username}:`,o);return}})}function E(r,e){return fetch(`/api/profiles/${r.username}`,{method:"PUT",headers:{"Content-Type":"application/json",...C.headers(e)},body:JSON.stringify(r.profile)}).then(t=>{if(t.status===200)return t.json();throw new Error(`Failed to save profile for ${r.username}`)}).then(t=>{if(t)return t})}/**
+import{a as C,i as d,V as O,O as I,d as S,b as R,x as n,r as k,c,e as T,f as N,n as f,h as v,g as J,s as G,_ as q}from"./reset.css-BPlqXxCa.js";import{p as H,t as Q}from"./tokens.css-BBceHDCE.js";const Y={};function E(o,e,t){switch(o[0]){case"profile/save":W(o[1],t).then(r=>e(i=>({...i,profile:r}))).then(()=>{const{onSuccess:r}=o[1];r&&r()}).catch(r=>{const{onFailure:i}=o[1];i&&i(r)});break;case"profile/select":K(o[1],t).then(r=>e(i=>({...i,profile:r})));break;default:const s=o[0];throw new Error(`Unhandled message "${s}"`)}}function K(o,e){return fetch(`/api/profiles/${o.username}`,{headers:C.headers(e)}).then(async t=>{if(!t.ok){console.warn(`Profile fetch failed with status ${t.status}`);return}const s=await t.text();if(!s){console.warn(`Empty response for user ${o.username}`);return}try{return JSON.parse(s)}catch{console.error(`Failed to parse JSON for ${o.username}:`,s);return}})}function W(o,e){return fetch(`/api/profiles/${o.username}`,{method:"PUT",headers:{"Content-Type":"application/json",...C.headers(e)},body:JSON.stringify(o.profile)}).then(t=>{if(t.status===200)return t.json();throw new Error(`Failed to save profile for ${o.username}`)}).then(t=>{if(t)return t})}/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const G=r=>(e,t)=>{t!==void 0?t.addInitializer(()=>{customElements.define(r,e)}):customElements.define(r,e)},H=c`
+ */const X=o=>(e,t)=>{t!==void 0?t.addInitializer(()=>{customElements.define(o,e)}):customElements.define(o,e)},Z=d`
     body {
         background-color: var(--color-background-page);
         margin: 0;
@@ -68,7 +68,6 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
     }
 
     .front-page-header {
-        background: var(--episode-logo-gradient);
         text-align: center;
         margin: 0;
         padding: 25px;
@@ -119,43 +118,86 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
         justify-content: center;
         align-items: center;
     }
-`,F={styles:H};var Q=Object.defineProperty,j=(r,e,t,o)=>{for(var s=void 0,i=r.length-1,a;i>=0;i--)(a=r[i])&&(s=a(e,t,s)||s);return s&&Q(e,t,s),s};function Y(r){const t=r.target.checked;M.relay(r,"dark-mode",{checked:t})}function q(r){M.relay(r,"auth:message",["auth/signout"])}const y=class y extends _{constructor(){super("episode:model"),this.loggedIn=!1,this.username="episodian",this._authObserver=new B(this,"episode:auth")}render(){const e=this.username||"episodian";return n`
+`,B={styles:Z};var V=Object.defineProperty,ee=Object.getOwnPropertyDescriptor,F=(o,e,t,s)=>{for(var r=s>1?void 0:s?ee(e,t):e,i=o.length-1,a;i>=0;i--)(a=o[i])&&(r=(s?a(e,t,r):a(r))||r);return s&&r&&V(e,t,r),r};function te(o){const t=o.target.checked;T.relay(o,"dark-mode",{checked:t})}function re(o){T.relay(o,"auth:message",["auth/signout"])}const w=class w extends O{constructor(){super("episode:model"),this.loggedIn=!1,this.username="episodian",this._authObserver=new I(this,"episode:auth")}get profile(){return this.model.profile}render(){var r,i;const e=this.username||"episodian",t=((r=this.profile)==null?void 0:r.profilePicture)||"/assets/profile.jpg",s=((i=this.profile)==null?void 0:i.color)||"#ccc";return n`
             <header class="front-page-header">
                 <div class="left-group">
-                    <h1 class="Episode-logo">Episode</h1>
-                    <p>For all the Episode fans out there!</p>
-                    <label @change=${Y}>
-                        <input type="checkbox" />
-                        Dark Mode
-                    </label>
+                    <img src="/assets/logo.png" alt="Episode Logo" class="logo" />
                 </div>
 
                 <mu-dropdown>
-                    <a href="/app/profiles/${this.username}">
-                        View Profile
-                    </a>
-                    <a slot="actuator">Hello, <b>${e}</b></a>
+                    <img
+                            slot="actuator"
+                            src=${t}
+                            alt="Profile Picture"
+                            class="profile-pic"
+                            style="border: 2px solid ${s}"
+                    />
                     <menu>
+                        <li class="user-name"><b>${e}</b></li>
+                        <li>
+                            <a href="/app/profiles/${this.username}">View Profile</a>
+                        </li>
+                        <li>
+                            <label class="dark-toggle">
+                                <input type="checkbox" @change=${te} />
+                                Dark Mode
+                            </label>
+                        </li>
                         <li class="when-signed-in">
-                            <a id="signout" @click=${q}>Sign Out</a>
+                            <a id="signout" @click=${re}>Sign Out</a>
                         </li>
                         <li class="when-signed-out">
                             <a href="/login">Sign In</a>
                         </li>
                     </menu>
                 </mu-dropdown>
-            </header>`}connectedCallback(){super.connectedCallback(),this._authObserver.observe(({user:e})=>{e&&e.authenticated?(this.loggedIn=!0,this.username=e.username,this.dispatchMessage(["profile/select",{username:this.username}])):(this.loggedIn=!1,this.username=void 0)})}static initializeOnce(){function e(t,o){t.classList.toggle("dark-mode",o)}document.body.addEventListener("dark-mode",t=>{var o;return e(t.currentTarget,(o=t.detail)==null?void 0:o.checked)})}};y.uses=P({"mu-dropdown":T.Element}),y.styles=[$.styles,F.styles,c`
+            </header>
+        `}connectedCallback(){super.connectedCallback(),this._authObserver.observe(({user:e})=>{e&&e.authenticated?(this.loggedIn=!0,this.username=e.username,this.dispatchMessage(["profile/select",{username:this.username}])):(this.loggedIn=!1,this.username=void 0)})}static initializeOnce(){function e(t,s){t.classList.toggle("dark-mode",s)}document.body.addEventListener("dark-mode",t=>{var s;return e(t.currentTarget,(s=t.detail)==null?void 0:s.checked)})}};w.uses=S({"mu-dropdown":R.Element}),w.styles=[k.styles,H.styles,Q.styles,B.styles,d`
             .front-page-header {
-                position: relative; /* Needed for absolute positioning inside */
-                padding-right: 3rem; /* space so dropdown doesn't overlap content */
+                background-color: #eeeef6ff;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0.5rem 1.5rem;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                border-bottom: 4px solid white; 
+                position: relative;
+                z-index: 10;
+            }
+
+            .logo {
+                height: 40px;
             }
 
             mu-dropdown {
-                position: absolute;
-                top: 0.5rem;
-                right: 1rem;
+                position: relative;
             }
-        `];let u=y;j([d()],u.prototype,"loggedIn");j([d()],u.prototype,"username");var K=Object.getOwnPropertyDescriptor,W=(r,e,t,o)=>{for(var s=o>1?void 0:o?K(e,t):e,i=r.length-1,a;i>=0;i--)(a=r[i])&&(s=a(s)||s);return s};let v=class extends x{render(){return n`
+
+            .profile-pic {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+                padding: 4px;
+                background-color: white;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+                cursor: pointer;
+            }
+
+            menu {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.75rem;
+            }
+
+            .dark-toggle {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-size: 0.9rem;
+            }
+        `];let u=w;F([c()],u.prototype,"loggedIn",2);F([c()],u.prototype,"username",2);F([c()],u.prototype,"profile",1);var se=Object.getOwnPropertyDescriptor,oe=(o,e,t,s)=>{for(var r=s>1?void 0:s?se(e,t):e,i=o.length-1,a;i>=0;i--)(a=o[i])&&(r=a(r)||r);return r};let b=class extends N{render(){return n`
             <episode-header></episode-header>
       <section class="Trending">
         <div class="title-with-icons">
@@ -216,7 +258,7 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
           <a href="app/stories/bad_meets_bad">Bad Meets Bad</a>
         </div>
       </section>
-    `}};v.styles=[F.styles,$.styles,c`
+    `}};b.styles=[B.styles,k.styles,d`
             .front-page-header {
                 position: relative; /* Needed for absolute positioning inside */
                 padding-right: 3rem; /* space so dropdown doesn't overlap content */
@@ -227,7 +269,7 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
                 top: 0.5rem;
                 right: 1rem;
             }
-        `];v=W([G("home-view")],v);var X=Object.defineProperty,O=(r,e,t,o)=>{for(var s=void 0,i=r.length-1,a;i>=0;i--)(a=r[i])&&(s=a(e,t,s)||s);return s&&X(e,t,s),s};const b=class b extends x{constructor(){super(...arguments),this.mode="view"}connectedCallback(){super.connectedCallback(),this.storyPath&&this.loadStory()}updated(e){if(e.has("storyPath")&&this.loadStory(),this.story){const o={Romance:"hotpink",Drama:"darkslategray",LGBTQ:"mediumorchid",Fantasy:"rebeccapurple",SciFi:"deepskyblue",Mystery:"darkslateblue",Comedy:"goldenrod",Action:"firebrick",Adventure:"teal",Thriller:"indigo",Horror:"crimson"}[this.story.genre]||"steelblue";this.style.setProperty("--accent-color",o)}}async loadStory(){try{const e=await fetch(`/api/stories/${this.storyPath}`);if(!e.ok)throw new Error(`Failed to fetch story: ${e.statusText}`);this.story=await e.json()}catch(e){console.error(e),this.story=void 0}}render(){return this.story?n`
+        `];b=oe([X("home-view")],b);var ie=Object.defineProperty,j=(o,e,t,s)=>{for(var r=void 0,i=o.length-1,a;i>=0;i--)(a=o[i])&&(r=a(e,t,r)||r);return r&&ie(e,t,r),r};const $=class $ extends N{constructor(){super(...arguments),this.mode="view"}connectedCallback(){super.connectedCallback(),this.storyPath&&this.loadStory()}updated(e){if(e.has("storyPath")&&this.loadStory(),this.story){const s={Romance:"hotpink",Drama:"darkslategray",LGBTQ:"mediumorchid",Fantasy:"rebeccapurple",SciFi:"deepskyblue",Mystery:"darkslateblue",Comedy:"goldenrod",Action:"firebrick",Adventure:"teal",Thriller:"indigo",Horror:"crimson"}[this.story.genre]||"steelblue";this.style.setProperty("--accent-color",s)}}async loadStory(){try{const e=await fetch(`/api/stories/${this.storyPath}`);if(!e.ok)throw new Error(`Failed to fetch story: ${e.statusText}`);this.story=await e.json()}catch(e){console.error(e),this.story=void 0}}render(){return this.story?n`
       <section>
         <header>
           <a href="../../../app">&larr; Home</a>
@@ -278,7 +320,7 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
           </div>
         </div>
       </section>
-    `:n`<p>Loading story...</p>`}};b.uses={},b.styles=[c`
+    `:n`<p>Loading story...</p>`}};$.uses={},$.styles=[d`
       :host {
         --accent-color: steelblue;
       }
@@ -296,7 +338,7 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
         margin-left: 1.5em;
         padding-left: 1em;
       }
-    `];let p=b;O([h({attribute:"storypath"})],p.prototype,"storyPath");O([h()],p.prototype,"mode");O([d()],p.prototype,"story");var Z=Object.defineProperty,k=(r,e,t,o)=>{for(var s=void 0,i=r.length-1,a;i>=0;i--)(a=r[i])&&(s=a(e,t,s)||s);return s&&Z(e,t,s),s};const S=class S extends x{constructor(){super(...arguments),this.chapterNumber=0}connectedCallback(){super.connectedCallback(),this.storyPath&&this.chapterNumber&&this.loadChapter()}updated(e){(e.has("storyPath")||e.has("chapterNumber"))&&this.loadChapter()}async loadChapter(){if(!(!this.storyPath||!this.chapterNumber))try{const e=await fetch(`/api/stories/${this.storyPath}`);if(!e.ok)throw new Error(`Failed to fetch story: ${e.statusText}`);this.story=await e.json(),this.story&&this.story.chapters?this.selectedChapter=this.story.chapters.find(t=>t.chapterNumber===this.chapterNumber):this.selectedChapter=void 0,this.selectedChapter||console.error(`Chapter ${this.chapterNumber} not found in story ${this.storyPath}`)}catch(e){console.error(e),this.story=void 0,this.selectedChapter=void 0}}render(){if(!this.selectedChapter)return n`<p>Loading chapter...</p>`;const e=this.selectedChapter;return n`
+    `];let g=$;j([f({attribute:"storypath"})],g.prototype,"storyPath");j([f()],g.prototype,"mode");j([c()],g.prototype,"story");var ae=Object.defineProperty,x=(o,e,t,s)=>{for(var r=void 0,i=o.length-1,a;i>=0;i--)(a=o[i])&&(r=a(e,t,r)||r);return r&&ae(e,t,r),r};const z=class z extends N{constructor(){super(...arguments),this.chapterNumber=0}connectedCallback(){super.connectedCallback(),this.storyPath&&this.chapterNumber&&this.loadChapter()}updated(e){(e.has("storyPath")||e.has("chapterNumber"))&&this.loadChapter()}async loadChapter(){if(!(!this.storyPath||!this.chapterNumber))try{const e=await fetch(`/api/stories/${this.storyPath}`);if(!e.ok)throw new Error(`Failed to fetch story: ${e.statusText}`);this.story=await e.json(),this.story&&this.story.chapters?this.selectedChapter=this.story.chapters.find(t=>t.chapterNumber===this.chapterNumber):this.selectedChapter=void 0,this.selectedChapter||console.error(`Chapter ${this.chapterNumber} not found in story ${this.storyPath}`)}catch(e){console.error(e),this.story=void 0,this.selectedChapter=void 0}}render(){if(!this.selectedChapter)return n`<p>Loading chapter...</p>`;const e=this.selectedChapter;return n`
             <section>
                 <header>
                     <a href="/app/stories/${this.storyPath}">&larr; Back</a>
@@ -313,7 +355,7 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
                     ${e.comments&&e.comments.length>0?e.comments.map(t=>n`<p>${t}</p>`):n`<p>No comments yet.</p>`}
                 </section>
             </section>
-        `}};S.styles=c`
+        `}};z.styles=d`
     a {
       color: steelblue;
       font-weight: bold;
@@ -344,10 +386,10 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
     button:hover {
       background-color: #1c4a8b;
     }
-  `;let l=S;k([h({attribute:"storypath"})],l.prototype,"storyPath");k([h({type:Number,attribute:"chapternumber"})],l.prototype,"chapterNumber");k([d()],l.prototype,"story");k([d()],l.prototype,"selectedChapter");var V=Object.defineProperty,ee=Object.getOwnPropertyDescriptor,L=(r,e,t,o)=>{for(var s=o>1?void 0:o?ee(e,t):e,i=r.length-1,a;i>=0;i--)(a=r[i])&&(s=(o?a(e,t,s):a(s))||s);return o&&s&&V(e,t,s),s};const N=class N extends _{get profile(){return this.model.profile}render(){const{username:e,profilePicture:t,color:o="ffffff"}=this.profile||{};return n`
+  `;let p=z;x([f({attribute:"storypath"})],p.prototype,"storyPath");x([f({type:Number,attribute:"chapternumber"})],p.prototype,"chapterNumber");x([c()],p.prototype,"story");x([c()],p.prototype,"selectedChapter");var ne=Object.defineProperty,le=Object.getOwnPropertyDescriptor,U=(o,e,t,s)=>{for(var r=s>1?void 0:s?le(e,t):e,i=o.length-1,a;i>=0;i--)(a=o[i])&&(r=(s?a(e,t,r):a(r))||r);return s&&r&&ne(e,t,r),r};const M=class M extends O{get profile(){return this.model.profile}render(){const{username:e,profilePicture:t,color:s="ffffff"}=this.profile||{};return n`
       <main class="page">
           <nav>
-              <button @click=${()=>{f.dispatch(this,"history/navigate",{href:"/app"})}}>
+              <button @click=${()=>{v.dispatch(this,"history/navigate",{href:"/app"})}}>
                   ← Back to Home
               </button>
           </nav>
@@ -355,7 +397,7 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
           <section class="view">
         <img src=${t}/>
         <button id="edit"
-                   @click=${()=>f.dispatch(this,"history/navigate",{href:`/app/profiles/${this.username}/edit`})}
+                   @click=${()=>v.dispatch(this,"history/navigate",{href:`/app/profiles/${this.username}/edit`})}
         >Edit</button>
         <h1>${name}</h1>
         <dl>
@@ -366,15 +408,15 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
           <dd>
               <span
                 class="swatch"
-                style="background: #${o}"></span>
+                style="background: #${s}"></span>
             </slot>
-            <slot name="color-name">#${o}</slot>
+            <slot name="color-name">#${s}</slot>
           </dd>
         </dl>
       </section>
       <mu-form class="edit" .init=${this.profile}>
       </main>
-    `}constructor(){super("episode:model")}attributeChangedCallback(e,t,o){super.attributeChangedCallback(e,t,o),e==="username"&&t!==o&&o&&this.dispatchMessage(["profile/select",{username:o}])}firstUpdated(){this.username&&this.dispatchMessage(["profile/select",{username:this.username}])}};N.styles=[$.styles,c`
+    `}constructor(){super("episode:model")}attributeChangedCallback(e,t,s){super.attributeChangedCallback(e,t,s),e==="username"&&t!==s&&s&&this.dispatchMessage(["profile/select",{username:s}])}firstUpdated(){this.username&&this.dispatchMessage(["profile/select",{username:this.username}])}};M.styles=[k.styles,d`
       :host {
         display: contents;
         grid-column: 2/-2;
@@ -440,18 +482,20 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
         grid-column: 1/-1;
         grid-template-columns: subgrid;
       }
-    `];let g=N;L([h()],g.prototype,"username",2);L([d()],g.prototype,"profile",1);var te=Object.defineProperty,re=Object.getOwnPropertyDescriptor,z=(r,e,t,o)=>{for(var s=o>1?void 0:o?re(e,t):e,i=r.length-1,a;i>=0;i--)(a=r[i])&&(s=(o?a(e,t,s):a(s))||s);return o&&s&&te(e,t,s),s};const w=class w extends _{get profile(){return this.model.profile}render(){return this.profile?n`
+    `];let y=M;U([f()],y.prototype,"username",2);U([c()],y.prototype,"profile",1);var ce=Object.defineProperty,pe=Object.getOwnPropertyDescriptor,L=(o,e,t,s)=>{for(var r=s>1?void 0:s?pe(e,t):e,i=o.length-1,a;i>=0;i--)(a=o[i])&&(r=(s?a(e,t,r):a(r))||r);return s&&r&&ce(e,t,r),r};const P=class P extends O{constructor(){var e;super("episode:model"),this.image=(e=this.profile)==null?void 0:e.profilePicture}get profile(){return this.model.profile}render(){var t;if(!this.profile)return n`<p>Profile does not exist, please go back to the <a href="/app">homepage</a></p>`;const e=this.image||((t=this.profile)==null?void 0:t.profilePicture)||"/assets/default.jpg";return n`
         <main class="page">
             <mu-form
                 .init=${this.profile}
                 @mu-form:submit=${this.handleSubmit}>
                 <label>
                     <span>Username</span>
-                    
                 </label>
                 <label>
-                    <span>Avatar</span>
-                    <input type="file" name="profilePicture" />
+                    <span>Featured Image</span>
+                    <img src=${e} class="preview-pic" alt="Preview" />
+                    <input
+                            type="file"
+                            @change=${this._handleFileSelected} />
                 </label>
                 <label>
                     <span>Color</span>
@@ -459,7 +503,7 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
                 </label>
             </mu-form>
         </main>
-    `:n`<p>Loading...</p>`}constructor(){super("episode:model")}attributeChangedCallback(e,t,o){super.attributeChangedCallback(e,t,o),e==="username"&&t!==o&&o&&this.dispatchMessage(["profile/select",{username:o}])}handleSubmit(e){if(!this.username){console.error("Username is not set, cannot save profile.");return}this.dispatchMessage(["profile/save",{username:this.username,profile:e.detail,onSuccess:()=>{f.dispatch(this,"history/navigate",{href:`/app/profiles/${this.username}`})},onFailure:t=>console.log("ERROR:",t)}])}firstUpdated(){this.username&&this.dispatchMessage(["profile/select",{username:this.username}])}};w.uses=P({"mu-form":D.Element}),w.styles=[$.styles,c`
+    `}attributeChangedCallback(e,t,s){super.attributeChangedCallback(e,t,s),e==="username"&&t!==s&&s&&this.dispatchMessage(["profile/select",{username:s}])}handleSubmit(e){if(!this.username){console.error("Username is not set, cannot save profile.");return}const t={...e.detail,profilePicture:this.image};this.dispatchMessage(["profile/save",{username:this.username,profile:t,onSuccess:()=>{v.dispatch(this,"history/navigate",{href:`/app/profiles/${this.username}`})},onFailure:s=>console.log("ERROR:",s)}])}firstUpdated(){this.username&&this.dispatchMessage(["profile/select",{username:this.username}])}_handleFileSelected(e){const s=e.target.files[0];new Promise((i,a)=>{const h=new FileReader;h.onload=()=>i(h.result),h.onerror=_=>a(_),h.readAsArrayBuffer(s)}).then(i=>{const{name:a,size:h,type:_}=s,A=new URLSearchParams({filename:a}),D=new URL("/images",document.location.origin);D.search=A.toString(),console.log("Uploading file:",s),fetch(D,{method:"POST",headers:{"Content-Type":_,"Content-Length":h.toString()},body:i}).then(l=>{if(l.status===201)return l.json();throw l.status}).then(l=>{if(l)console.log("Image has been uploaded to",l.url),this.image=l.url;else throw"No JSON response"}).catch(l=>{console.log("Upload failed",l)})})}};P.uses=S({"mu-form":J.Element}),P.styles=[k.styles,d`
       :host {
         display: contents;
         grid-column: 2/-2;
@@ -499,17 +543,17 @@ import{a as C,i as c,V as _,O as B,d as P,b as T,x as n,r as $,c as d,e as M,f a
         grid-column: 1/-1;
         grid-template-columns: subgrid;
       }
-    `];let m=w;z([h()],m.prototype,"username",2);z([d()],m.prototype,"profile",1);const se=[{auth:"protected",path:"/app/stories/:storyPath/chapters/:chapterNumber",view:r=>n`
+    `];let m=P;L([f()],m.prototype,"username",2);L([c()],m.prototype,"profile",1);L([c()],m.prototype,"image",2);const de=[{auth:"protected",path:"/app/stories/:storyPath/chapters/:chapterNumber",view:o=>n`
             <chapter-view
-                    storyPath=${r.storyPath}
-                    chapterNumber=${r.chapterNumber}>
+                    storyPath=${o.storyPath}
+                    chapterNumber=${o.chapterNumber}>
             </chapter-view>
-        `},{path:"/app/stories/:storyPath",view:r=>n`
-      <story-view storyPath=${r.storyPath}></story-view>
-    `},{auth:"protected",path:"/app/profiles/:username/edit",view:r=>n`
-    <reader-edit username=${r.username}></reader-edit>`},{auth:"protected",path:"/app/profiles/:username",view:r=>n`
+        `},{path:"/app/stories/:storyPath",view:o=>n`
+      <story-view storyPath=${o.storyPath}></story-view>
+    `},{auth:"protected",path:"/app/profiles/:username/edit",view:o=>n`
+    <reader-edit username=${o.username}></reader-edit>`},{auth:"protected",path:"/app/profiles/:username",view:o=>n`
       <reader-view
-        username=${r.username}></reader-view>
+        username=${o.username}></reader-view>
     `},{path:"/app",view:()=>n`
       <home-view></home-view>
-    `},{path:"/",redirect:"/app"}];P({"mu-auth":C.Provider,"mu-history":f.Provider,"mu-switch":class extends I.Element{constructor(){super(se,"episode:history","episode:auth")}},"mu-store":class extends A.Provider{constructor(){super(R,U,"episode:auth")}},"episode-header":u,"home-view":v,"story-view":p,"chapter-view":l,"reader-view":g,"reader-edit":m});
+    `},{path:"/",redirect:"/app"}];S({"mu-auth":C.Provider,"mu-history":v.Provider,"mu-switch":class extends q.Element{constructor(){super(de,"episode:history","episode:auth")}},"mu-store":class extends G.Provider{constructor(){super(E,Y,"episode:auth")}},"episode-header":u,"home-view":b,"story-view":g,"chapter-view":p,"reader-view":y,"reader-edit":m});
