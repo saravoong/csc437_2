@@ -1,4 +1,4 @@
-import { Reader, Story } from "../../server/src/models/models.ts";
+import { Reader, Story, Review } from "../../server/src/models/models.ts";
 
 export type Msg =
     | [
@@ -24,5 +24,11 @@ export type Msg =
             comment: string;
             onSuccess?: () => void;
             onFailure?: (err: Error) => void;
-        }
-];
+        }]
+    | ["story/review/add", {
+            storyPath: string;
+            review: Review & { username: string };
+            onSuccess?: () => void;
+            onFailure?: (err: Error) => void;
+        }]
+    ;

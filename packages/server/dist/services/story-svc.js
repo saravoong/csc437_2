@@ -23,6 +23,12 @@ __export(story_svc_exports, {
 module.exports = __toCommonJS(story_svc_exports);
 var import_mongoose = require("mongoose");
 var import_chapter_svc = require("./chapter-svc");
+const reviewSchema = new import_mongoose.Schema({
+  username: { type: String, required: true },
+  rating: { type: Number, required: true, min: 1, max: 5 },
+  comment: { type: String, required: true },
+  date: { type: Date, required: true, default: () => /* @__PURE__ */ new Date() }
+});
 const StorySchema = new import_mongoose.Schema(
   {
     "img-src": String,
@@ -34,7 +40,8 @@ const StorySchema = new import_mongoose.Schema(
     storyLink: String,
     storyPath: String,
     synopsis: String,
-    chapters: [import_chapter_svc.ChapterSchema]
+    chapters: [import_chapter_svc.ChapterSchema],
+    reviews: [reviewSchema]
   },
   { collection: "stories" }
 );
@@ -97,4 +104,12 @@ async function addComment(storyPath, chapterNumber, comment) {
   await story.save();
   return chapter;
 }
-var story_svc_default = { index, get, getChapter, create, update, remove, addComment };
+async function addReview(storyPath, review) {
+  const story = await StoryModel.findOne({ storyPath });
+  if (!story) throw new Error("Story not found");
+  story.reviews = story.reviews || [];
+  story.reviews.push({ ...review, date: /* @__PURE__ */ new Date() });
+  await story.save();
+  return story;
+}
+var story_svc_default = { index, get, getChapter, create, update, remove, addComment, addReview };

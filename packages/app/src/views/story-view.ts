@@ -1,9 +1,13 @@
-import { html, css, LitElement } from "lit";
+import { html, css } from "lit";
 import { property, state } from "lit/decorators.js";
-import type { Story, Chapter } from "../../../server/src/models/models.ts";
+import { Story, Chapter } from "../../../server/src/models/models.ts";
 import reset from "../styles/reset.css.ts";
+import { View } from "@calpoly/mustang";
+import { Model } from "../model.ts";
+import { Msg } from "../messages.ts";
+import "./reviews-view";
 
-export class StoryViewElement extends LitElement {
+export class StoryViewElement extends View<Model, Msg> {
     @property({ attribute: "storypath" })
     storyPath?: string;
 
@@ -123,11 +127,46 @@ export class StoryViewElement extends LitElement {
                 background-color: #3a3a4a;
             }
 
+            .add-review {
+                margin-top: 1rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .add-review input,
+            .add-review select,
+            .add-review textarea {
+                padding: 0.5rem;
+                font-family: "Baloo 2", cursive;
+                font-size: 1rem;
+                border-radius: 0.5rem;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+                width: 100%;
+            }
+
+            .add-review textarea {
+                resize: vertical;
+                min-height: 4rem;
+            }
+
+            .add-review button {
+                align-self: flex-start;
+            }
+
+            .error {
+                color: crimson;
+                font-weight: 600;
+            }
+
+
         `
     ];
 
     connectedCallback() {
         super.connectedCallback();
+
         if (this.storyPath) {
             this.loadStory();
         }
@@ -206,6 +245,7 @@ export class StoryViewElement extends LitElement {
     }
 
     render() {
+
         if (!this.story) {
             return html`<p>Loading story...</p>`;
         }
@@ -239,7 +279,11 @@ export class StoryViewElement extends LitElement {
                     </div>
 
                     <div class="right-column">
-                        <section><h3>Reviews</h3></section>
+                        <section>
+                    <h3>Reviews</h3>
+                            
+                </section>
+
                         <section>
                             <h3>Chapters</h3>
                             <button @click=${this.handleAddChapter}>Add Chapter + </button>
@@ -257,6 +301,7 @@ export class StoryViewElement extends LitElement {
                         </section>
                     </div>
                 </div>
+                <reviews-view .storyPath=${this.storyPath}></reviews-view>
             </section>
         `;
     }

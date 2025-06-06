@@ -9,6 +9,7 @@ export default function update(
     apply: Update.ApplyMap<Model>,
     user: Auth.User
 ) {
+
     switch (message[0]) {
         case "profile/save":
             saveProfile(message[1], user)
@@ -47,16 +48,49 @@ export default function update(
                 });
             break;
         case "chapter/comment/add":
-            addComment(message[1], user)
-                .then((updatedChapter) =>
+            const payload = message[1];
+
+            loadProfile({ username: user.username }, user)
+                .then((profile) => {
+                    if (!profile) {
+                        throw new Error("Failed to load user profile");
+                    }
+
+                    return addComment(payload, user).then((updatedChapter) => ({
+                        updatedChapter,
+                        profile
+                    }));
+                })
+                .then(({ updatedChapter, profile }) =>
                     apply((model) => ({
                         ...model,
+                        profile,
                         Story: {
                             ...model.story,
-                            chapters: model.story?.chapters?.map((ch) =>
-                                ch.chapterNumber === updatedChapter.chapterNumber ? updatedChapter : ch
-                            ) ?? [],
+                            chapters:
+                                model.story?.chapters?.map((ch) =>
+                                    ch.chapterNumber === updatedChapter.chapterNumber
+                                        ? updatedChapter
+                                        : ch
+                                ) ?? [],
                         },
+                    }))
+                )
+                .then(() => {
+                    const { onSuccess } = payload;
+                    if (onSuccess) onSuccess();
+                })
+                .catch((error: Error) => {
+                    const { onFailure } = payload;
+                    if (onFailure) onFailure(error);
+                });
+            break;
+        case "story/review/add":
+            addReview(message[1], user)
+                .then((updatedStory) =>
+                    apply((model) => ({
+                        ...model,
+                        story: updatedStory
                     }))
                 )
                 .then(() => {
@@ -68,6 +102,7 @@ export default function update(
                     if (onFailure) onFailure(error);
                 });
             break;
+
         default:
             const unhandled: never = message[0];
             throw new Error(`Unhandled message "${unhandled}"`);
@@ -176,4 +211,26 @@ function addComment(
         else throw new Error(`Failed to add comment`);
     });
 }
+
+function addReview(
+    msg: {
+        storyPath: string;
+        review: { rating: number; comment: string }
+    },
+    user: Auth.User) {
+
+    return fetch(`/api/stories/${msg.storyPath}/reviews`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            ...Auth.headers(user),
+        },
+        body: JSON.stringify(msg.review)
+    }).then((response: Response) => {
+        if (response.ok) return response.json();
+        else throw new Error(`Failed to add review`);
+    });
+}
+
+
 

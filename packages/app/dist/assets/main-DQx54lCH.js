@@ -1,8 +1,8 @@
-import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f as k,n as m,h as D,g as E,s as W,_ as Y}from"./reset.css-BPlqXxCa.js";import{p as J,t as q}from"./tokens.css-B8I_IFMe.js";const X={};function Z(o,e,r){switch(o[0]){case"profile/save":ee(o[1],r).then(t=>e(i=>({...i,profile:t}))).then(()=>{const{onSuccess:t}=o[1];t&&t()}).catch(t=>{const{onFailure:i}=o[1];i&&i(t)});break;case"profile/select":V(o[1],r).then(t=>e(i=>({...i,profile:t})));break;case"story/save":te(o[1],r).then(t=>e(i=>({...i,story:t}))).then(()=>{const{onSuccess:t}=o[1];t&&t()}).catch(t=>{const{onFailure:i}=o[1];i&&i(t)});break;case"chapter/comment/add":re(o[1],r).then(t=>e(i=>{var s,x;return{...i,Story:{...i.story,chapters:((x=(s=i.story)==null?void 0:s.chapters)==null?void 0:x.map(c=>c.chapterNumber===t.chapterNumber?t:c))??[]}}})).then(()=>{const{onSuccess:t}=o[1];t&&t()}).catch(t=>{const{onFailure:i}=o[1];i&&i(t)});break;default:const a=o[0];throw new Error(`Unhandled message "${a}"`)}}function V(o,e){return fetch(`/api/profiles/${o.username}`,{headers:C.headers(e)}).then(async r=>{if(!r.ok){console.warn(`Profile fetch failed with status ${r.status}`);return}const a=await r.text();if(!a){console.warn(`Empty response for user ${o.username}`);return}try{return JSON.parse(a)}catch{console.error(`Failed to parse JSON for ${o.username}:`,a);return}})}function ee(o,e){return fetch(`/api/profiles/${o.username}`,{method:"PUT",headers:{"Content-Type":"application/json",...C.headers(e)},body:JSON.stringify(o.profile)}).then(r=>{if(r.status===200)return r.json();throw new Error(`Failed to save profile for ${o.username}`)}).then(r=>{if(r)return r})}function te(o,e){return console.log("Sending story to backend:",o.story),fetch("/api/stories",{method:"POST",headers:{"Content-Type":"application/json",...C.headers(e)},body:JSON.stringify(o.story)}).then(r=>{if(r.status===200)return r.json();throw new Error(`Failed to save profile for ${o.story}`)}).then(r=>{if(r)return r})}function re(o,e){return fetch(`/api/stories/${o.storyPath}/chapters/${o.chapterNumber}/comments`,{method:"POST",headers:{"Content-Type":"application/json",...C.headers(e)},body:JSON.stringify({comment:o.comment})}).then(r=>{if(r.ok)return r.json();throw new Error("Failed to add comment")})}/**
+import{a as x,i as c,V as $,O as V,d as D,b as ee,x as n,r as g,e as K,c as l,f as F,n as d,h as M,g as W,s as te,_ as re}from"./reset.css-BPlqXxCa.js";import{p as Y,t as X}from"./tokens.css-B8I_IFMe.js";const oe={};function ae(r,e,t){switch(r[0]){case"profile/save":ie(r[1],t).then(a=>e(s=>({...s,profile:a}))).then(()=>{const{onSuccess:a}=r[1];a&&a()}).catch(a=>{const{onFailure:s}=r[1];s&&s(a)});break;case"profile/select":H(r[1],t).then(a=>e(s=>({...s,profile:a})));break;case"story/save":se(r[1],t).then(a=>e(s=>({...s,story:a}))).then(()=>{const{onSuccess:a}=r[1];a&&a()}).catch(a=>{const{onFailure:s}=r[1];s&&s(a)});break;case"chapter/comment/add":const i=r[1];H({username:t.username},t).then(a=>{if(!a)throw new Error("Failed to load user profile");return ne(i,t).then(s=>({updatedChapter:s,profile:a}))}).then(({updatedChapter:a,profile:s})=>e(b=>{var h,q;return{...b,profile:s,Story:{...b.story,chapters:((q=(h=b.story)==null?void 0:h.chapters)==null?void 0:q.map(Q=>Q.chapterNumber===a.chapterNumber?a:Q))??[]}}})).then(()=>{const{onSuccess:a}=i;a&&a()}).catch(a=>{const{onFailure:s}=i;s&&s(a)});break;case"story/review/add":le(r[1],t).then(a=>e(s=>({...s,story:a}))).then(()=>{const{onSuccess:a}=r[1];a&&a()}).catch(a=>{const{onFailure:s}=r[1];s&&s(a)});break;default:const o=r[0];throw new Error(`Unhandled message "${o}"`)}}function H(r,e){return fetch(`/api/profiles/${r.username}`,{headers:x.headers(e)}).then(async t=>{if(!t.ok){console.warn(`Profile fetch failed with status ${t.status}`);return}const i=await t.text();if(!i){console.warn(`Empty response for user ${r.username}`);return}try{return JSON.parse(i)}catch{console.error(`Failed to parse JSON for ${r.username}:`,i);return}})}function ie(r,e){return fetch(`/api/profiles/${r.username}`,{method:"PUT",headers:{"Content-Type":"application/json",...x.headers(e)},body:JSON.stringify(r.profile)}).then(t=>{if(t.status===200)return t.json();throw new Error(`Failed to save profile for ${r.username}`)}).then(t=>{if(t)return t})}function se(r,e){return console.log("Sending story to backend:",r.story),fetch("/api/stories",{method:"POST",headers:{"Content-Type":"application/json",...x.headers(e)},body:JSON.stringify(r.story)}).then(t=>{if(t.status===200)return t.json();throw new Error(`Failed to save profile for ${r.story}`)}).then(t=>{if(t)return t})}function ne(r,e){return fetch(`/api/stories/${r.storyPath}/chapters/${r.chapterNumber}/comments`,{method:"POST",headers:{"Content-Type":"application/json",...x.headers(e)},body:JSON.stringify({comment:r.comment})}).then(t=>{if(t.ok)return t.json();throw new Error("Failed to add comment")})}function le(r,e){return fetch(`/api/stories/${r.storyPath}/reviews`,{method:"POST",headers:{"Content-Type":"application/json",...x.headers(e)},body:JSON.stringify(r.review)}).then(t=>{if(t.ok)return t.json();throw new Error("Failed to add review")})}/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const F=o=>(e,r)=>{r!==void 0?r.addInitializer(()=>{customElements.define(o,e)}):customElements.define(o,e)},oe=d`
+ */const A=r=>(e,t)=>{t!==void 0?t.addInitializer(()=>{customElements.define(r,e)}):customElements.define(r,e)},ce=c`
     body {
         background-color: var(--color-background-page);
         margin: 0;
@@ -118,7 +118,7 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
         justify-content: center;
         align-items: center;
     }
-`,A={styles:oe};var ae=Object.defineProperty,ie=Object.getOwnPropertyDescriptor,L=(o,e,r,a)=>{for(var t=a>1?void 0:a?ie(e,r):e,i=o.length-1,s;i>=0;i--)(s=o[i])&&(t=(a?s(e,r,t):s(t))||t);return a&&t&&ae(e,r,t),t};function se(o){const r=o.target.checked;U.relay(o,"dark-mode",{checked:r})}const _=class _ extends j{constructor(){super("episode:model"),this.loggedIn=!1,this.username="episodian",this._authObserver=new H(this,"episode:auth")}get profile(){return this.model.profile}render(){var t,i;const e=this.username||"episodian",r=((t=this.profile)==null?void 0:t.profilePicture)||"/assets/defaultpfp.png",a=((i=this.profile)==null?void 0:i.color)||"#ccc";return n`
+`,L={styles:ce};var de=Object.defineProperty,he=Object.getOwnPropertyDescriptor,B=(r,e,t,i)=>{for(var o=i>1?void 0:i?he(e,t):e,a=r.length-1,s;a>=0;a--)(s=r[a])&&(o=(i?s(e,t,o):s(o))||o);return i&&o&&de(e,t,o),o};function pe(r){const t=r.target.checked;K.relay(r,"dark-mode",{checked:t})}const T=class T extends ${constructor(){super("episode:model"),this.loggedIn=!1,this.username="episodian",this._authObserver=new V(this,"episode:auth")}get profile(){return this.model.profile}render(){var o,a;const e=this.username||"episodian",t=((o=this.profile)==null?void 0:o.profilePicture)||"/assets/defaultpfp.png",i=((a=this.profile)==null?void 0:a.color)||"#ccc";return n`
             <header class="front-page-header">
                 <div class="left-group">
                     <img src="/assets/logo.png" alt="Episode Logo" class="logo" />
@@ -139,15 +139,15 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
                     <mu-dropdown>
                         <img
                                 slot="actuator"
-                                src=${r}
+                                src=${t}
                                 alt="Profile Picture"
                                 class="profile-pic"
-                                style="border: 2px solid ${a}"
+                                style="border: 2px solid ${i}"
                         />
                         <menu>
                             <li>
                                 <label class="dark-toggle">
-                                    <input type="checkbox" @change=${se} />
+                                    <input type="checkbox" @change=${pe} />
                                     Dark Mode
                                 </label>
                             </li>
@@ -158,9 +158,9 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
                     </mu-dropdown>
                 </div>
             </header>
-        `}connectedCallback(){super.connectedCallback(),this._authObserver.observe(({user:e})=>{e&&e.authenticated?(this.loggedIn=!0,this.username=e.username,this.dispatchMessage(["profile/select",{username:this.username}])):(this.loggedIn=!1,this.username=void 0)})}static initializeOnce(){function e(r,a){r.classList.toggle("dark-mode",a)}document.body.addEventListener("dark-mode",r=>{var a;return e(r.currentTarget,(a=r.detail)==null?void 0:a.checked)})}renderSignOutButton(){return n`
+        `}connectedCallback(){super.connectedCallback(),this._authObserver.observe(({user:e})=>{e&&e.authenticated?(this.loggedIn=!0,this.username=e.username,this.dispatchMessage(["profile/select",{username:this.username}])):(this.loggedIn=!1,this.username=void 0)})}static initializeOnce(){function e(t,i){t.classList.toggle("dark-mode",i)}document.body.addEventListener("dark-mode",t=>{var i;return e(t.currentTarget,(i=t.detail)==null?void 0:i.checked)})}renderSignOutButton(){return n`
             <button
-                    @click=${e=>{U.relay(e,"auth:message",["auth/signout"])}}
+                    @click=${e=>{K.relay(e,"auth:message",["auth/signout"])}}
             >
                 Sign Out
             </button>
@@ -168,7 +168,7 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
             <button @click=${()=>{window.location.href="/login.html"}}>
                 Sign In
             </button>
-        `}};_.uses=z({"mu-dropdown":K.Element}),_.styles=[f.styles,J.styles,q.styles,A.styles,d`
+        `}};T.uses=D({"mu-dropdown":ee.Element}),T.styles=[g.styles,Y.styles,X.styles,L.styles,c`
             .front-page-header {
                 background-color: white;
                 display: flex;
@@ -289,7 +289,7 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
                 background-color: #1a1a40ff;
                 transform: scale(1.02);
             }
-        `];let g=_;L([l()],g.prototype,"loggedIn",2);L([l()],g.prototype,"username",2);L([l()],g.prototype,"profile",1);var ne=Object.getOwnPropertyDescriptor,le=(o,e,r,a)=>{for(var t=a>1?void 0:a?ne(e,r):e,i=o.length-1,s;i>=0;i--)(s=o[i])&&(t=s(t)||t);return t};let S=class extends k{render(){return n`
+        `];let y=T;B([l()],y.prototype,"loggedIn",2);B([l()],y.prototype,"username",2);B([l()],y.prototype,"profile",1);var me=Object.getOwnPropertyDescriptor,ue=(r,e,t,i)=>{for(var o=i>1?void 0:i?me(e,t):e,a=r.length-1,s;a>=0;a--)(s=r[a])&&(o=s(o)||o);return o};let _=class extends F{render(){return n`
             <episode-header></episode-header>
       <section class="Trending">
         <div class="title-with-icons">
@@ -336,7 +336,7 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
         </div>
       </section>
 
-    `}};S.styles=[A.styles,f.styles,d`
+    `}};_.styles=[L.styles,g.styles,c`
             .front-page-header {
                 position: relative; /* Needed for absolute positioning inside */
                 padding-right: 3rem; /* space so dropdown doesn't overlap content */
@@ -347,7 +347,97 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
                 top: 0.5rem;
                 right: 1rem;
             }
-        `];S=le([F("home-view")],S);var ce=Object.defineProperty,M=(o,e,r,a)=>{for(var t=void 0,i=o.length-1,s;i>=0;i--)(s=o[i])&&(t=s(e,r,t)||t);return t&&ce(e,r,t),t};const I=class I extends k{constructor(){super(...arguments),this.mode="view"}connectedCallback(){super.connectedCallback(),this.storyPath&&this.loadStory()}updated(e){var r;if(e.has("storyPath")&&this.loadStory(),this.story){const a={Romance:"hotpink",Drama:"darkslategray",LGBTQ:"mediumorchid",Fantasy:"rebeccapurple",SciFi:"deepskyblue",Mystery:"darkslateblue",Comedy:"goldenrod",Action:"firebrick",Adventure:"teal",Thriller:"indigo",Horror:"crimson"},t=((r=this.story.genre)==null?void 0:r.replace(/\+/g,""))||"",i=a[t]||"steelblue";this.style.setProperty("--accent-color",i)}}async loadStory(){try{const e=await fetch(`/api/stories/${this.storyPath}`);if(!e.ok)throw new Error(`Failed to fetch story: ${e.statusText}`);this.story=await e.json()}catch(e){console.error(e),this.story=void 0}}async handleAddChapter(){if(!this.story||!this.storyPath)return;const r=Math.max(0,...this.story.chapters.map(i=>i.chapterNumber||0))+1,a={chapterNumber:r,title:`Chapter ${r}`,summary:"",comments:[],href:`./chapters/${r}.html`,storyTitle:this.story.storyTitle},t={...this.story,chapterCount:r,chapters:[...this.story.chapters,a]};try{const i=await fetch(`/api/stories/${this.storyPath}`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(t)});if(!i.ok)throw new Error("Failed to update story with new chapter");this.story=await i.json()}catch(i){console.error("Error adding chapter:",i)}}render(){return this.story?n`
+        `];_=ue([A("home-view")],_);var fe=Object.defineProperty,ge=Object.getOwnPropertyDescriptor,C=(r,e,t,i)=>{for(var o=i>1?void 0:i?ge(e,t):e,a=r.length-1,s;a>=0;a--)(s=r[a])&&(o=(i?s(e,t,o):s(o))||o);return i&&o&&fe(e,t,o),o};const G=class G extends ${constructor(){super("episode:model"),this.storyPath="",this.reviews=[],this.newComment="",this.errorMessage="",this.username="Testing for now"}get profile(){return this.model.profile}connectedCallback(){super.connectedCallback(),this.loadReviews()}updated(e){e.has("storyPath")&&this.loadReviews()}async loadReviews(){if(!this.storyPath){this.reviews=[];return}try{const e=await fetch(`/api/stories/${this.storyPath}/reviews`);if(!e.ok)throw new Error("Failed to load reviews");this.reviews=await e.json(),this.errorMessage=""}catch(e){this.errorMessage=e.message}}handleSubmit(){var o;if(!this.newComment.trim())return;this.errorMessage="";const t={username:((o=this.profile)==null?void 0:o.username)||"Anonymous",rating:1,comment:this.newComment.trim(),date:new Date},i=t.date instanceof Date?t.date.toISOString():t.date;this.dispatchMessage(["story/review/add",{storyPath:this.storyPath,review:{...t,date:i}}]),this.reviews=[t,...this.reviews],this.newComment=""}render(){return n`
+      <section>
+        <h3>Reviews</h3>
+        <textarea
+          .value=${this.newComment}
+          @input=${e=>this.newComment=e.target.value}
+        ></textarea>
+        <button
+          @click=${this.handleSubmit}
+          ?disabled=${!this.newComment.trim()}
+        >
+          Submit Review
+        </button>
+        ${this.errorMessage?n`<p class="error">${this.errorMessage}</p>`:""}
+        ${this.reviews.length?n`<ul>
+              ${this.reviews.map(e=>n`<li>
+                  <span class="review-username">${e.username}</span>
+                    <span class="review-date">
+                      ${e.date?new Date(e.date).toLocaleDateString():"No date"}
+                    </span>
+                    <div>${e.comment}</div>
+                </li>`)}
+            </ul>`:n`<p>No reviews yet. Be the first to add one!</p>`}
+      </section>
+    `}};G.styles=[g.styles,c`
+      :host {
+        display: block;
+        max-width: 600px;
+        font-family: "Comfortaa", sans-serif;
+        margin: 1rem auto;
+        background: white;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        color: #2a2a55ff;
+      }
+      textarea {
+        width: 100%;
+        min-height: 4rem;
+        font-family: "Comfortaa", cursive;
+        font-size: 1rem;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #ccc;
+        resize: vertical;
+        box-sizing: border-box;
+        margin-bottom: 0.5rem;
+      }
+      button {
+        background-color: #2a2a55ff;
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:disabled {
+        background-color: #999;
+        cursor: not-allowed;
+      }
+      .error {
+        color: crimson;
+        margin-top: 0.5rem;
+        font-weight: 600;
+      }
+      ul {
+        padding-left: 1rem;
+        margin-top: 1rem;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      li {
+        border-bottom: 1px solid #eee;
+        padding: 0.5rem 0;
+      }
+      .review-username {
+        font-weight: 700;
+        color: #1a1a40ff;
+      }
+      .review-date {
+        font-size: 0.75rem;
+        color: #888;
+        margin-left: 0.5rem;
+      }
+    `];let p=G;C([l()],p.prototype,"profile",1);C([d({type:String})],p.prototype,"storyPath",2);C([l()],p.prototype,"reviews",2);C([l()],p.prototype,"newComment",2);C([l()],p.prototype,"errorMessage",2);C([d({type:String})],p.prototype,"username",2);var be=Object.defineProperty,R=(r,e,t,i)=>{for(var o=void 0,a=r.length-1,s;a>=0;a--)(s=r[a])&&(o=s(e,t,o)||o);return o&&be(e,t,o),o};const U=class U extends ${constructor(){super(...arguments),this.mode="view"}connectedCallback(){super.connectedCallback(),this.storyPath&&this.loadStory()}updated(e){var t;if(e.has("storyPath")&&this.loadStory(),this.story){const i={Romance:"hotpink",Drama:"darkslategray",LGBTQ:"mediumorchid",Fantasy:"rebeccapurple",SciFi:"deepskyblue",Mystery:"darkslateblue",Comedy:"goldenrod",Action:"firebrick",Adventure:"teal",Thriller:"indigo",Horror:"crimson"},o=((t=this.story.genre)==null?void 0:t.replace(/\+/g,""))||"",a=i[o]||"steelblue";this.style.setProperty("--accent-color",a)}}async loadStory(){try{const e=await fetch(`/api/stories/${this.storyPath}`);if(!e.ok)throw new Error(`Failed to fetch story: ${e.statusText}`);this.story=await e.json()}catch(e){console.error(e),this.story=void 0}}async handleAddChapter(){if(!this.story||!this.storyPath)return;const t=Math.max(0,...this.story.chapters.map(a=>a.chapterNumber||0))+1,i={chapterNumber:t,title:`Chapter ${t}`,summary:"",comments:[],href:`./chapters/${t}.html`,storyTitle:this.story.storyTitle},o={...this.story,chapterCount:t,chapters:[...this.story.chapters,i]};try{const a=await fetch(`/api/stories/${this.storyPath}`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)});if(!a.ok)throw new Error("Failed to update story with new chapter");this.story=await a.json()}catch(a){console.error("Error adding chapter:",a)}}render(){return this.story?n`
             <episode-header></episode-header>
             <h1 style="padding: 2rem 0 1rem; color: #1a1a40;">${this.story.storyTitle}</h1>
             <section>
@@ -376,7 +466,11 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
                     </div>
 
                     <div class="right-column">
-                        <section><h3>Reviews</h3></section>
+                        <section>
+                    <h3>Reviews</h3>
+                            
+                </section>
+
                         <section>
                             <h3>Chapters</h3>
                             <button @click=${this.handleAddChapter}>Add Chapter + </button>
@@ -392,8 +486,9 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
                         </section>
                     </div>
                 </div>
+                <reviews-view .storyPath=${this.storyPath}></reviews-view>
             </section>
-        `:n`<p>Loading story...</p>`}};I.styles=[f.styles,d`
+        `:n`<p>Loading story...</p>`}};U.styles=[g.styles,c`
             :host {
                 display: block;
                 min-height: 100vh;
@@ -501,7 +596,41 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
                 background-color: #3a3a4a;
             }
 
-        `];let b=I;M([m({attribute:"storypath"})],b.prototype,"storyPath");M([m()],b.prototype,"mode");M([l()],b.prototype,"story");var de=Object.defineProperty,v=(o,e,r,a)=>{for(var t=void 0,i=o.length-1,s;i>=0;i--)(s=o[i])&&(t=s(e,r,t)||t);return t&&de(e,r,t),t};const G=class G extends k{constructor(){super(...arguments),this.chapterNumber=0,this.newComment="",this.errorMessage=""}connectedCallback(){super.connectedCallback(),this.storyPath&&this.chapterNumber&&this.loadChapter()}updated(e){(e.has("storyPath")||e.has("chapterNumber"))&&this.loadChapter()}async loadChapter(){if(!(!this.storyPath||!this.chapterNumber))try{const e=await fetch(`/api/stories/${this.storyPath}`);if(!e.ok)throw new Error(`Failed to fetch story: ${e.statusText}`);this.story=await e.json(),this.story&&this.story.chapters?this.selectedChapter=this.story.chapters.find(r=>r.chapterNumber===this.chapterNumber):this.selectedChapter=void 0,this.selectedChapter||console.error(`Chapter ${this.chapterNumber} not found in story ${this.storyPath}`)}catch(e){console.error(e),this.story=void 0,this.selectedChapter=void 0}}async handleAddComment(){if(!(!this.storyPath||!this.chapterNumber||!this.newComment.trim())){this.errorMessage="";try{const e=await fetch(`/api/stories/${this.storyPath}/chapters/${this.chapterNumber}/comments`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({comment:this.newComment.trim()})});if(!e.ok){const a=await e.text();throw new Error(a||"Failed to submit comment")}const r=await e.json();this.selectedChapter=r,this.newComment=""}catch(e){this.errorMessage=e instanceof Error?e.message:"Unknown error"}}}render(){if(!this.selectedChapter)return n`<p>Loading chapter...</p>`;const e=this.selectedChapter;return n`
+            .add-review {
+                margin-top: 1rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .add-review input,
+            .add-review select,
+            .add-review textarea {
+                padding: 0.5rem;
+                font-family: "Baloo 2", cursive;
+                font-size: 1rem;
+                border-radius: 0.5rem;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+                width: 100%;
+            }
+
+            .add-review textarea {
+                resize: vertical;
+                min-height: 4rem;
+            }
+
+            .add-review button {
+                align-self: flex-start;
+            }
+
+            .error {
+                color: crimson;
+                font-weight: 600;
+            }
+
+
+        `];let v=U;R([d({attribute:"storypath"})],v.prototype,"storyPath");R([d()],v.prototype,"mode");R([l()],v.prototype,"story");var ye=Object.defineProperty,k=(r,e,t,i)=>{for(var o=void 0,a=r.length-1,s;a>=0;a--)(s=r[a])&&(o=s(e,t,o)||o);return o&&ye(e,t,o),o};const E=class E extends F{constructor(){super(...arguments),this.chapterNumber=0,this.newComment="",this.errorMessage=""}connectedCallback(){super.connectedCallback(),this.storyPath&&this.chapterNumber&&this.loadChapter()}updated(e){(e.has("storyPath")||e.has("chapterNumber"))&&this.loadChapter()}async loadChapter(){if(!(!this.storyPath||!this.chapterNumber))try{const e=await fetch(`/api/stories/${this.storyPath}`);if(!e.ok)throw new Error(`Failed to fetch story: ${e.statusText}`);this.story=await e.json(),this.story&&this.story.chapters?this.selectedChapter=this.story.chapters.find(t=>t.chapterNumber===this.chapterNumber):this.selectedChapter=void 0,this.selectedChapter||console.error(`Chapter ${this.chapterNumber} not found in story ${this.storyPath}`)}catch(e){console.error(e),this.story=void 0,this.selectedChapter=void 0}}async handleAddComment(){if(!(!this.storyPath||!this.chapterNumber||!this.newComment.trim())){this.errorMessage="";try{const e=await fetch(`/api/stories/${this.storyPath}/chapters/${this.chapterNumber}/comments`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({comment:this.newComment.trim()})});if(!e.ok){const i=await e.text();throw new Error(i||"Failed to submit comment")}const t=await e.json();this.selectedChapter=t,this.newComment=""}catch(e){this.errorMessage=e instanceof Error?e.message:"Unknown error"}}}render(){if(!this.selectedChapter)return n`<p>Loading chapter...</p>`;const e=this.selectedChapter;return n`
             <section class="chapter-container">
                 <header>
                     <a href="/app/stories/${this.storyPath}">&larr; Back to Story</a>
@@ -517,7 +646,7 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
                   <h3>Add a Comment</h3>
                   <textarea
                     .value=${this.newComment}
-                    @input=${r=>this.newComment=r.target.value}
+                    @input=${t=>this.newComment=t.target.value}
                     placeholder="Write your comment here..."
                     rows="4"
                   ></textarea>
@@ -529,10 +658,10 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
 
                 <section class="comments">
                     <h3>Comments</h3>
-                    ${e.comments&&e.comments.length>0?e.comments.map(r=>n`<p>${r}</p>`):n`<p>No comments yet.</p>`}
+                    ${e.comments&&e.comments.length>0?e.comments.map(t=>n`<p>${t}</p>`):n`<p>No comments yet.</p>`}
                 </section>
             </section>
-        `}};G.styles=d`
+        `}};E.styles=c`
         .chapter-container {
             max-width: 800px;
             margin: 2rem auto;
@@ -619,32 +748,32 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
             margin-top: 0.5rem;
         }
 
-    `;let h=G;v([m({attribute:"storypath"})],h.prototype,"storyPath");v([m({type:Number,attribute:"chapternumber"})],h.prototype,"chapterNumber");v([l()],h.prototype,"story");v([l()],h.prototype,"selectedChapter");v([l()],h.prototype,"newComment");v([l()],h.prototype,"errorMessage");var he=Object.defineProperty,pe=Object.getOwnPropertyDescriptor,Q=(o,e,r,a)=>{for(var t=a>1?void 0:a?pe(e,r):e,i=o.length-1,s;i>=0;i--)(s=o[i])&&(t=(a?s(e,r,t):s(t))||t);return a&&t&&he(e,r,t),t};const R=class R extends j{get profile(){return this.model.profile}render(){const{username:e,profilePicture:r,color:a="ffffff"}=this.profile||{};return n`
+    `;let m=E;k([d({attribute:"storypath"})],m.prototype,"storyPath");k([d({type:Number,attribute:"chapternumber"})],m.prototype,"chapterNumber");k([l()],m.prototype,"story");k([l()],m.prototype,"selectedChapter");k([l()],m.prototype,"newComment");k([l()],m.prototype,"errorMessage");var ve=Object.defineProperty,we=Object.getOwnPropertyDescriptor,Z=(r,e,t,i)=>{for(var o=i>1?void 0:i?we(e,t):e,a=r.length-1,s;a>=0;a--)(s=r[a])&&(o=(i?s(e,t,o):s(o))||o);return i&&o&&ve(e,t,o),o};const J=class J extends ${get profile(){return this.model.profile}render(){const{username:e,profilePicture:t,color:i="ffffff"}=this.profile||{};return n`
             <episode-header></episode-header>
             <section>
       <main class="card">
           <section class="profile-view">
-        <img src=${r}/>
+        <img src=${t}/>
               <dt>Username</dt>
               <dd>${e||"N/A"}</dd>
               <dt>Favorite Color</dt>
               <dd>
               <span
                       class="swatch"
-                      style="background: ${a}"></span>
+                      style="background: ${i}"></span>
                   </slot>
-                  <slot name="color-name">${a}</slot>
+                  <slot name="color-name">${i}</slot>
               </dd>
               
         <button id="edit"
-                   @click=${()=>D.dispatch(this,"history/navigate",{href:`/app/profiles/${this.username}/edit`})}
+                   @click=${()=>M.dispatch(this,"history/navigate",{href:`/app/profiles/${this.username}/edit`})}
         >Edit Profile
         </button>
       </section>
       
       </main>
             </section>
-    `}constructor(){super("episode:model")}attributeChangedCallback(e,r,a){super.attributeChangedCallback(e,r,a),e==="username"&&r!==a&&a&&this.dispatchMessage(["profile/select",{username:a}])}firstUpdated(){this.username&&this.dispatchMessage(["profile/select",{username:this.username}])}};R.styles=[f.styles,d`
+    `}constructor(){super("episode:model")}attributeChangedCallback(e,t,i){super.attributeChangedCallback(e,t,i),e==="username"&&t!==i&&i&&this.dispatchMessage(["profile/select",{username:i}])}firstUpdated(){this.username&&this.dispatchMessage(["profile/select",{username:this.username}])}};J.styles=[g.styles,c`
             :host {
                 display: flex;
                 flex-direction: column;
@@ -745,7 +874,7 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
             #edit:hover {
                 background-color: #1a1a40ff;
             }
-    `];let $=R;Q([m()],$.prototype,"username",2);Q([l()],$.prototype,"profile",1);var me=Object.defineProperty,ue=Object.getOwnPropertyDescriptor,B=(o,e,r,a)=>{for(var t=a>1?void 0:a?ue(e,r):e,i=o.length-1,s;i>=0;i--)(s=o[i])&&(t=(a?s(e,r,t):s(t))||t);return a&&t&&me(e,r,t),t};const T=class T extends j{constructor(){var e;super("episode:model"),this.image=(e=this.profile)==null?void 0:e.profilePicture}get profile(){return this.model.profile}render(){if(!this.profile)return n`
+    `];let S=J;Z([d()],S.prototype,"username",2);Z([l()],S.prototype,"profile",1);var xe=Object.defineProperty,$e=Object.getOwnPropertyDescriptor,I=(r,e,t,i)=>{for(var o=i>1?void 0:i?$e(e,t):e,a=r.length-1,s;a>=0;a--)(s=r[a])&&(o=(i?s(e,t,o):s(o))||o);return i&&o&&xe(e,t,o),o};const N=class N extends ${constructor(){var e;super("episode:model"),this.image=(e=this.profile)==null?void 0:e.profilePicture}get profile(){return this.model.profile}render(){if(!this.profile)return n`
                 <p>Profile does not exist. Please go back to the <a href="/app">homepage</a>.</p>
             `;const e=this.image||this.profile.profilePicture||"/assets/default.jpg";return n`
             <episode-header></episode-header>
@@ -768,7 +897,7 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
                     </mu-form>
                 </main>
             </section>
-        `}handleSubmit(e){if(!this.username)return;const r={...e.detail,profilePicture:this.image};this.dispatchMessage(["profile/save",{username:this.username,profile:r,onSuccess:()=>{D.dispatch(this,"history/navigate",{href:`/app/profiles/${this.username}`})},onFailure:a=>console.log("ERROR:",a)}])}_handleFileSelected(e){var i;const a=(i=e.target.files)==null?void 0:i[0];if(!a)return;const t=new FileReader;t.onload=()=>{const s=t.result,x=new URL("/images",document.location.origin);x.searchParams.set("filename",a.name),fetch(x.toString(),{method:"POST",headers:{"Content-Type":a.type,"Content-Length":a.size.toString()},body:s}).then(c=>c.status===201?c.json():Promise.reject(c.status)).then(c=>{this.image=c.url}).catch(c=>console.log("Upload failed",c))},t.onerror=s=>console.log("File reading error",s),t.readAsArrayBuffer(a)}};T.uses=z({"mu-form":E.Element}),T.styles=[f.styles,d`
+        `}handleSubmit(e){if(!this.username)return;const t={...e.detail,profilePicture:this.image};this.dispatchMessage(["profile/save",{username:this.username,profile:t,onSuccess:()=>{M.dispatch(this,"history/navigate",{href:`/app/profiles/${this.username}`})},onFailure:i=>console.log("ERROR:",i)}])}_handleFileSelected(e){var a;const i=(a=e.target.files)==null?void 0:a[0];if(!i)return;const o=new FileReader;o.onload=()=>{const s=o.result,b=new URL("/images",document.location.origin);b.searchParams.set("filename",i.name),fetch(b.toString(),{method:"POST",headers:{"Content-Type":i.type,"Content-Length":i.size.toString()},body:s}).then(h=>h.status===201?h.json():Promise.reject(h.status)).then(h=>{this.image=h.url}).catch(h=>console.log("Upload failed",h))},o.onerror=s=>console.log("File reading error",s),o.readAsArrayBuffer(i)}};N.uses=D({"mu-form":W.Element}),N.styles=[g.styles,c`
         :host {
             display: flex;
             flex-direction: column;
@@ -877,33 +1006,33 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
             .custom-submit:hover {
                 background-color: #1a1a40ff;
             }
-    `];let y=T;B([m()],y.prototype,"username",2);B([l()],y.prototype,"profile",1);B([l()],y.prototype,"image",2);var fe=Object.defineProperty,ge=Object.getOwnPropertyDescriptor,w=(o,e,r,a)=>{for(var t=a>1?void 0:a?ge(e,r):e,i=o.length-1,s;i>=0;i--)(s=o[i])&&(t=(a?s(e,r,t):s(t))||t);return a&&t&&fe(e,r,t),t};let p=class extends k{constructor(){super(...arguments),this.stories=[],this.loading=!0,this.error=null,this.searchTerm="",this.selectedGenre=""}connectedCallback(){super.connectedCallback(),this.loadStories()}async loadStories(){try{this.loading=!0,this.error=null;const o=await fetch("/api/stories");if(!o.ok)throw new Error(`Failed to fetch stories: ${o.statusText}`);const e=await o.json();this.stories=e}catch(o){this.error=o.message||"Unknown error"}finally{this.loading=!1}}get filteredStories(){return this.stories.filter(o=>{const e=o.storyTitle.toLowerCase().includes(this.searchTerm)||o.authorName.toLowerCase().includes(this.searchTerm),r=!this.selectedGenre||o.genre===this.selectedGenre;return e&&r})}addStory(){window.location.href="/app/stories/add"}render(){return n`
+    `];let w=N;I([d()],w.prototype,"username",2);I([l()],w.prototype,"profile",1);I([l()],w.prototype,"image",2);var Ce=Object.defineProperty,ke=Object.getOwnPropertyDescriptor,P=(r,e,t,i)=>{for(var o=i>1?void 0:i?ke(e,t):e,a=r.length-1,s;a>=0;a--)(s=r[a])&&(o=(i?s(e,t,o):s(o))||o);return i&&o&&Ce(e,t,o),o};let u=class extends F{constructor(){super(...arguments),this.stories=[],this.loading=!0,this.error=null,this.searchTerm="",this.selectedGenre=""}connectedCallback(){super.connectedCallback(),this.loadStories()}async loadStories(){try{this.loading=!0,this.error=null;const r=await fetch("/api/stories");if(!r.ok)throw new Error(`Failed to fetch stories: ${r.statusText}`);const e=await r.json();this.stories=e}catch(r){this.error=r.message||"Unknown error"}finally{this.loading=!1}}get filteredStories(){return this.stories.filter(r=>{const e=r.storyTitle.toLowerCase().includes(this.searchTerm)||r.authorName.toLowerCase().includes(this.searchTerm),t=!this.selectedGenre||r.genre===this.selectedGenre;return e&&t})}addStory(){window.location.href="/app/stories/add"}render(){return n`
             <episode-header></episode-header>
             <section class="filters">
                 <input
                         type="text"
                         placeholder="Search by title or author"
-                        @input=${o=>this.searchTerm=o.target.value.toLowerCase()}
+                        @input=${r=>this.searchTerm=r.target.value.toLowerCase()}
                 />
-                <select @change=${o=>this.selectedGenre=o.target.value}>
+                <select @change=${r=>this.selectedGenre=r.target.value}>
                     <option value="">All Genres</option>
-                    ${["Romance","Drama","LGBTQ","Fantasy","SciFi","Mystery","Comedy","Action","Adventure","Thriller","Horror"].map(o=>n`<option value=${o}>${o}</option>`)}
+                    ${["Romance","Drama","LGBTQ","Fantasy","SciFi","Mystery","Comedy","Action","Adventure","Thriller","Horror"].map(r=>n`<option value=${r}>${r}</option>`)}
                 </select>
                 <button @click=${this.addStory}>Add Story +</button>
             </section>
             <main class="story-list">
-                ${this.filteredStories.map(o=>n`
+                ${this.filteredStories.map(r=>n`
                             <article class="story-card">
-                                <a href="/app/stories/${o.storyPath}">
-                                    <img src=${o["img-src"]||"/assets/defaultstorycover.png"}
-                                         alt=${o.storyTitle} 
+                                <a href="/app/stories/${r.storyPath}">
+                                    <img src=${r["img-src"]||"/assets/defaultstorycover.png"}
+                                         alt=${r.storyTitle} 
                                     />
-                                    <h2>${o.storyTitle}</h2>
+                                    <h2>${r.storyTitle}</h2>
                                 </a>
                             </article>
                         `)}
             </main>
-        `}};p.styles=[A.styles,f.styles,J.styles,q.styles,d`
+        `}};u.styles=[L.styles,g.styles,Y.styles,X.styles,c`
             :host {
                 display: block;
                 min-height: 100vh;
@@ -1015,12 +1144,12 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
             .filters button:hover {
                 background-color: #e06a00;
             }
-        `];w([l()],p.prototype,"stories",2);w([l()],p.prototype,"loading",2);w([l()],p.prototype,"error",2);w([l()],p.prototype,"searchTerm",2);w([l()],p.prototype,"selectedGenre",2);p=w([F("all-story-view")],p);var be=Object.getOwnPropertyDescriptor,ye=(o,e,r,a)=>{for(var t=a>1?void 0:a?be(e,r):e,i=o.length-1,s;i>=0;i--)(s=o[i])&&(t=s(t)||t);return t};let O=class extends k{render(){return n`
+        `];P([l()],u.prototype,"stories",2);P([l()],u.prototype,"loading",2);P([l()],u.prototype,"error",2);P([l()],u.prototype,"searchTerm",2);P([l()],u.prototype,"selectedGenre",2);u=P([A("all-story-view")],u);var Pe=Object.getOwnPropertyDescriptor,Se=(r,e,t,i)=>{for(var o=i>1?void 0:i?Pe(e,t):e,a=r.length-1,s;a>=0;a--)(s=r[a])&&(o=s(o)||o);return o};let j=class extends F{render(){return n`
       <episode-header></episode-header>
       <main>
           <add-story-form api="/api/stories"></add-story-form>
       </main>
-    `}};O.styles=d`
+    `}};j.styles=c`
         :host {
             display: block;
             min-height: 100vh;
@@ -1033,7 +1162,7 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
             margin: auto;
         }
 
-  `;O=ye([F("add-story-view")],O);var ve=Object.defineProperty,P=(o,e,r,a)=>{for(var t=void 0,i=o.length-1,s;i>=0;i--)(s=o[i])&&(t=s(e,r,t)||t);return t&&ve(e,r,t),t};const N=class N extends j{constructor(){super(...arguments),this.formData={},this.redirect="/",this.buttonLabel="Add Story"}generateStoryPath(e){return e.toLowerCase().trim().replace(/[^\w\s-]/g,"").replace(/\s+/g,"_")}get canSubmit(){const e=this.formData;return!!(this.api&&e.storyTitle&&e.authorName&&e.communityOrOfficial)}handleChange(e){const r=e.target,a=r.name;let t=r.value;a==="chapterCount"&&(t=parseInt(t,10),isNaN(t)&&(t=0)),this.formData={...this.formData,[a]:t}}handleSubmit(e){if(e.preventDefault(),!this.canSubmit){this.error="Please fill in all required fields.";return}const r={...this.formData,storyPath:this.generateStoryPath(this.formData.storyTitle||"")};fetch(this.api||"",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(r)}).then(a=>{if(a.status!==200&&a.status!==201)throw new Error("Failed to add story");return a.json()}).then(a=>{this.error=void 0;const t=a.storyPath||r.storyPath;window.location.href=`/app/stories/${t}`}).catch(a=>{this.error=a.toString()})}_handleFileSelected(e){var i;const a=(i=e.target.files)==null?void 0:i[0];if(!a)return;const t=new FileReader;t.onload=()=>{this.formData={...this.formData,"img-src":t.result}},t.readAsDataURL(a)}render(){const e=this.formData;return n`
+  `;j=Se([A("add-story-view")],j);var Oe=Object.defineProperty,O=(r,e,t,i)=>{for(var o=void 0,a=r.length-1,s;a>=0;a--)(s=r[a])&&(o=s(e,t,o)||o);return o&&Oe(e,t,o),o};const z=class z extends ${constructor(){super(...arguments),this.formData={},this.redirect="/",this.buttonLabel="Add Story"}generateStoryPath(e){return e.toLowerCase().trim().replace(/[^\w\s-]/g,"").replace(/\s+/g,"_")}get canSubmit(){const e=this.formData;return!!(this.api&&e.storyTitle&&e.authorName&&e.communityOrOfficial)}handleChange(e){const t=e.target,i=t.name;let o=t.value;i==="chapterCount"&&(o=parseInt(o,10),isNaN(o)&&(o=0)),this.formData={...this.formData,[i]:o}}handleSubmit(e){if(e.preventDefault(),!this.canSubmit){this.error="Please fill in all required fields.";return}const t={...this.formData,storyPath:this.generateStoryPath(this.formData.storyTitle||"")};fetch(this.api||"",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(t)}).then(i=>{if(i.status!==200&&i.status!==201)throw new Error("Failed to add story");return i.json()}).then(i=>{this.error=void 0;const o=i.storyPath||t.storyPath;window.location.href=`/app/stories/${o}`}).catch(i=>{this.error=i.toString()})}_handleFileSelected(e){var a;const i=(a=e.target.files)==null?void 0:a[0];if(!i)return;const o=new FileReader;o.onload=()=>{this.formData={...this.formData,"img-src":o.result}},o.readAsDataURL(i)}render(){const e=this.formData;return n`
       <form
         @input=${this.handleChange}
         @submit=${this.handleSubmit}
@@ -1129,7 +1258,7 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
 
         ${this.error?n`<p class="error">${this.error}</p>`:""}
       </form>
-    `}};N.uses=z({"mu-form":E.Element}),N.styles=[f.styles,d`
+    `}};z.uses=D({"mu-form":W.Element}),z.styles=[g.styles,c`
             :host {
                 display: flex;
                 justify-content: center;
@@ -1240,20 +1369,20 @@ import{a as C,i as d,V as j,O as H,d as z,b as K,x as n,r as f,e as U,c as l,f a
             button {
                 font-family: Comfortaa, "Comfortaa", sans-serif;
             }
-        `];let u=N;P([l()],u.prototype,"formData");P([m({type:String})],u.prototype,"api");P([m({type:String})],u.prototype,"redirect");P([l()],u.prototype,"error");P([m({type:String})],u.prototype,"buttonLabel");const we=[{auth:"protected",path:"/app/stories/add",view:()=>n`
-            <add-story-view></add-story-view>`},{auth:"protected",path:"/app/stories/:storyPath/chapters/:chapterNumber",view:o=>n`
+        `];let f=z;O([l()],f.prototype,"formData");O([d({type:String})],f.prototype,"api");O([d({type:String})],f.prototype,"redirect");O([l()],f.prototype,"error");O([d({type:String})],f.prototype,"buttonLabel");const _e=[{auth:"protected",path:"/app/stories/add",view:()=>n`
+            <add-story-view></add-story-view>`},{auth:"protected",path:"/app/stories/:storyPath/chapters/:chapterNumber",view:r=>n`
             <chapter-view
-                    storyPath=${o.storyPath}
-                    chapterNumber=${o.chapterNumber}>
+                    storyPath=${r.storyPath}
+                    chapterNumber=${r.chapterNumber}>
             </chapter-view>
-        `},{path:"/app/stories/:storyPath",view:o=>n`
-      <story-view storyPath=${o.storyPath}></story-view>
+        `},{path:"/app/stories/:storyPath",view:r=>n`
+      <story-view storyPath=${r.storyPath}></story-view>
     `},{path:"/app/stories",view:()=>n`
       <all-story-view></all-story-view>
-    `},{auth:"protected",path:"/app/profiles/:username/edit",view:o=>n`
-    <reader-edit username=${o.username}></reader-edit>`},{auth:"protected",path:"/app/profiles/:username",view:o=>n`
+    `},{auth:"protected",path:"/app/profiles/:username/edit",view:r=>n`
+    <reader-edit username=${r.username}></reader-edit>`},{auth:"protected",path:"/app/profiles/:username",view:r=>n`
       <reader-view
-        username=${o.username}></reader-view>
+        username=${r.username}></reader-view>
     `},{path:"/app",view:()=>n`
       <home-view></home-view>
-    `},{path:"/",redirect:"/app"}];z({"mu-auth":C.Provider,"mu-history":D.Provider,"mu-switch":class extends Y.Element{constructor(){super(we,"episode:history","episode:auth")}},"mu-store":class extends W.Provider{constructor(){super(Z,X,"episode:auth")}},"episode-header":g,"home-view":S,"all-story-view":p,"story-view":b,"chapter-view":h,"reader-view":$,"reader-edit":y,"add-story-view":O,"add-story-form":u});
+    `},{path:"/",redirect:"/app"}];D({"mu-auth":x.Provider,"mu-history":M.Provider,"mu-switch":class extends re.Element{constructor(){super(_e,"episode:history","episode:auth")}},"mu-store":class extends te.Provider{constructor(){super(ae,oe,"episode:auth")}},"episode-header":y,"home-view":_,"all-story-view":u,"story-view":v,"chapter-view":m,"reader-view":S,"reader-edit":w,"add-story-view":j,"add-story-form":f,"reviews-view":p});

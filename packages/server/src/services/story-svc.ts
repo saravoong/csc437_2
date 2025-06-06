@@ -1,6 +1,13 @@
 import { Schema, model } from "mongoose";
-import { Chapter, Story } from "../models/models";
+import { Chapter, Story, Review } from "../models/models";
 import { ChapterSchema } from "./chapter-svc";
+
+const reviewSchema = new Schema<Review>({
+    username: { type: String, required: true },
+    rating: { type: Number, required: true, min: 1, max: 5 },
+    comment: { type: String, required: true },
+    date: { type: Date, required: true, default: () => new Date() },
+});
 
 const StorySchema = new Schema<Story>(
     {
@@ -13,10 +20,12 @@ const StorySchema = new Schema<Story>(
         storyLink: String,
         storyPath: String,
         synopsis: String,
-        chapters: [ChapterSchema]
+        chapters: [ChapterSchema],
+        reviews: [reviewSchema],
     },
     { collection: "stories" }
 );
+
 
 const StoryModel = model<Story>(
     "Story",
@@ -97,4 +106,18 @@ async function addComment(storyPath: string, chapterNumber: number, comment: str
     return chapter;
 }
 
-export default { index, get, getChapter, create, update, remove, addComment };
+async function addReview(
+    storyPath: string,
+    review: { username: string; rating: number; comment: string }
+): Promise<Story> {
+    const story = await StoryModel.findOne({ storyPath });
+    if (!story) throw new Error("Story not found");
+
+    story.reviews = story.reviews || [];
+    story.reviews.push({ ...review, date: new Date() });
+
+    await story.save();
+    return story;
+}
+
+export default { index, get, getChapter, create, update, remove, addComment, addReview };

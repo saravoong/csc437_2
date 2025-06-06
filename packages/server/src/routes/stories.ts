@@ -19,6 +19,29 @@ router.get("/:storyPath", (req: Request, res: Response) => {
         .catch((err) => res.status(404).send(err));
 });
 
+router.post("/:storyPath/reviews", authenticateUser, async (req: Request, res: Response) => {
+    const { storyPath } = req.params;
+    const { username, rating, comment } = req.body;
+
+    try {
+        const updatedStory = await Stories.addReview(storyPath, { username, rating, comment });
+        res.status(201).json(updatedStory);
+    } catch (err) {
+        res.status(400).send(err instanceof Error ? err.message : err);
+    }
+});
+
+router.get("/:storyPath/reviews", async (req: Request, res: Response) => {
+    const { storyPath } = req.params;
+
+    try {
+        const story = await Stories.get(storyPath);
+        res.json(story.reviews || []);
+    } catch (err) {
+        res.status(404).send(err instanceof Error ? err.message : err);
+    }
+});
+
 router.get("/:storyPath/chapters/:chapterNumber", (req: Request, res: Response) => {
     const { storyPath, chapterNumber } = req.params;
 

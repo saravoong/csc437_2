@@ -18,6 +18,7 @@ import { ReaderEditElement } from "./views/reader-edit.ts";
 import { AllStoryViewElement } from "./views/all-story-view.ts";
 import { AddStoryViewElement } from "./views/add-story-view.ts";
 import { AddStoryFormElement } from "./views/add-story-form.ts";
+import { ReviewsViewElement } from "./views/reviews-view.ts";
 
 const routes: Switch.Route[] = [
     {
@@ -99,5 +100,6 @@ define({
     "reader-view": ReaderViewElement,
     "reader-edit": ReaderEditElement,
     "add-story-view": AddStoryViewElement,
-    "add-story-form": AddStoryFormElement
+    "add-story-form": AddStoryFormElement,
+    "reviews-view": ReviewsViewElement,
 });
