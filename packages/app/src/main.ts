@@ -15,8 +15,17 @@ import { StoryViewElement } from "./views/story-view.ts";
 import { ChapterViewElement } from "./views/chapter-view.ts";
 import { ReaderViewElement } from "./views/reader-view.ts";
 import { ReaderEditElement } from "./views/reader-edit.ts";
+import { AllStoryViewElement } from "./views/all-story-view.ts";
+import { AddStoryViewElement } from "./views/add-story-view.ts";
+import { AddStoryFormElement } from "./views/add-story-form.ts";
 
 const routes: Switch.Route[] = [
+    {
+        auth: "protected",
+        path: "/app/stories/add",
+        view: () => html`
+            <add-story-view></add-story-view>`
+    },
     {
         auth: "protected",
         path: "/app/stories/:storyPath/chapters/:chapterNumber",
@@ -31,6 +40,12 @@ const routes: Switch.Route[] = [
         path: "/app/stories/:storyPath",
         view: (params: Switch.Params) => html`
       <story-view storyPath=${params.storyPath}></story-view>
+    `
+    },
+    {
+        path: "/app/stories",
+        view: ()=> html`
+      <all-story-view></all-story-view>
     `
     },
     {
@@ -78,8 +93,11 @@ define({
     },
     "episode-header": HeaderElement,
     "home-view": HomeViewElement,
+    "all-story-view": AllStoryViewElement,
     "story-view": StoryViewElement,
     "chapter-view": ChapterViewElement,
     "reader-view": ReaderViewElement,
-    "reader-edit": ReaderEditElement
+    "reader-edit": ReaderEditElement,
+    "add-story-view": AddStoryViewElement,
+    "add-story-form": AddStoryFormElement
 });

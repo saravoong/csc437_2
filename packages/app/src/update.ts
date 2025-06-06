@@ -2,6 +2,7 @@ import { Auth, Update } from "@calpoly/mustang";
 import { Reader } from "../../server/src/models/models.ts";
 import { Msg } from "./messages";
 import { Model } from "./model";
+import { Story } from "../../server/src/models/models.ts";
 
 export default function update(
     message: Msg,
@@ -31,8 +32,44 @@ export default function update(
                     )
                 );
             break;
+        case "story/save":
+            saveStory(message[1], user)
+                .then((story) =>
+                    apply((model) => ({ ...model, story }))
+                )
+                .then(() => {
+                    const { onSuccess } = message[1];
+                    if (onSuccess) onSuccess();
+                })
+                .catch((error: Error) => {
+                    const { onFailure } = message[1];
+                    if (onFailure) onFailure(error);
+                });
+            break;
+        case "chapter/comment/add":
+            addComment(message[1], user)
+                .then((updatedChapter) =>
+                    apply((model) => ({
+                        ...model,
+                        Story: {
+                            ...model.story,
+                            chapters: model.story?.chapters?.map((ch) =>
+                                ch.chapterNumber === updatedChapter.chapterNumber ? updatedChapter : ch
+                            ) ?? [],
+                        },
+                    }))
+                )
+                .then(() => {
+                    const { onSuccess } = message[1];
+                    if (onSuccess) onSuccess();
+                })
+                .catch((error: Error) => {
+                    const { onFailure } = message[1];
+                    if (onFailure) onFailure(error);
+                });
+            break;
         default:
-            const unhandled: never = message[0]; // <-- never type
+            const unhandled: never = message[0];
             throw new Error(`Unhandled message "${unhandled}"`);
     }
 }
@@ -92,3 +129,51 @@ function saveProfile(
             return undefined;
         });
 }
+
+function saveStory(
+    msg: {
+        story: Story
+    },
+    user: Auth.User
+) {
+    console.log("Sending story to backend:", msg.story);
+    return fetch("/api/stories", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            ...Auth.headers(user)
+        },
+        body: JSON.stringify(msg.story)
+    }).then((response: Response) => {
+        if (response.status === 200) return response.json();
+        else throw new Error(
+            `Failed to save profile for ${msg.story}`
+        );
+    })
+        .then((json: unknown) => {
+            if (json) return json as Story;
+            return undefined;
+        });
+}
+
+function addComment(
+    msg: {
+        storyPath: string;
+        chapterNumber: number;
+        comment: string;
+    },
+    user: Auth.User
+) {
+    return fetch(`/api/stories/${msg.storyPath}/chapters/${msg.chapterNumber}/comments`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            ...Auth.headers(user),
+        },
+        body: JSON.stringify({ comment: msg.comment }),
+    }).then((response: Response) => {
+        if (response.ok) return response.json();
+        else throw new Error(`Failed to add comment`);
+    });
+}
+

@@ -4,7 +4,7 @@ const styles = css`
     :host, :root {
         --color-background-header: var(--color-text-heading);
         --color-header-text: rgb(255, 255, 255);
-        --color-background-page: rgb(255, 255, 255);
+        --color-background-page: #fde9f3;
         --color-accent: rgb(99, 129, 177);
         --color-accent-inverted: var(--color-link);
         --color-link: var(--color-text-heading);

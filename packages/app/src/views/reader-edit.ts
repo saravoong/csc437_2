@@ -29,78 +29,148 @@ export class ReaderEditElement extends View<Model, Msg> {
 
     render() {
         if (!this.profile) {
-            return html`<p>Profile does not exist, please go back to the <a href="/app">homepage</a></p>`;
+            return html`
+                <p>Profile does not exist. Please go back to the <a href="/app">homepage</a>.</p>
+            `;
         }
 
-        const imageUrl = this.image || this.profile?.profilePicture || "/assets/default.jpg";
+        const imageUrl = this.image || this.profile.profilePicture || "/assets/default.jpg";
 
         return html`
-        <main class="page">
-            <mu-form
-                .init=${this.profile}
-                @mu-form:submit=${this.handleSubmit}>
-                <label>
-                    <span>Username</span>
-                </label>
-                <label>
-                    <span>Featured Image</span>
-                    <img src=${imageUrl} class="preview-pic" alt="Preview" />
-                    <input
-                            type="file"
-                            @change=${this._handleFileSelected} />
-                </label>
-                <label>
-                    <span>Color</span>
-                    <input type="color" name="color" .value=${this.profile.color ?? "#000000"} />
-                </label>
-            </mu-form>
-        </main>
-    `;
-    }
+            <episode-header></episode-header>
+            <section>
+                <main class="card">
+                    <mu-form
+                            .init=${this.profile}
+                            @mu-form:submit=${this.handleSubmit}>
 
+                        <label>
+                            <span>Profile Picture</span>
+                            <img src=${imageUrl} class="preview-pic" alt="Preview" />
+                            <input type="file" @change=${this._handleFileSelected} />
+                        </label>
+
+                        <label>
+                            <span>Favorite Color</span>
+                            <input type="color" name="color" .value=${this.profile.color ?? "#000000"} />
+                        </label>
+                    </mu-form>
+                </main>
+            </section>
+        `;
+    }
 
     static styles = [
         reset.styles,
         css`
-      :host {
-        display: contents;
-        grid-column: 2/-2;
-      }
-      .page {
-        --page-grids: 12;
+        :host {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            font-family: "Comfortaa", sans-serif;
+            background-color: #eeeef6ff;
+        }
 
-        display: grid;
-        grid-template-columns:
-          [start] repeat(var(--page-grids), 1fr)
-          [end];
-        gap: var(--size-spacing-large)
-          var(--size-spacing-medium);
-      }
-      h1 {
-        grid-row: 2;
-        grid-column: auto / span 2;
-      }
-      ::slotted(img[slot="avatar"]) {
-        display: block;
-        grid-column: auto / span 2;
-        grid-row: 1 / span 2;
-      }
-      .swatch,
-      ::slotted([slot="color-swatch"]) {
-        display: inline-block;
-        width: 2em;
-        aspect-ratio: 1;
-        vertical-align: middle;
-      }
-      ::slotted(ul[slot="airports"]) {
-        list-style: none;
-        padding: 0;
-      }
-      mu-form {
-        display: var(--display-editor-none, grid);
-        grid-column: 1/-1;
-        grid-template-columns: subgrid;
-      }
+        episode-header {
+            flex: 0 0 auto;
+        }
+
+        section {
+            flex: 1 1 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            box-sizing: border-box;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        mu-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 1.5rem;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: 600;
+            color: #2a2a55ff;
+            width: 100%;
+        }
+
+        .preview-pic {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            object-fit: cover;
+        }
+
+        input[type="file"],
+        input[type="color"] {
+            margin-top: 0.5rem;
+        }
+
+        input[type="color"] {
+            width: 60px;
+            height: 34px;
+            border: none;
+            padding: 0;
+        }
+
+        button {
+            background-color: #2a2a55ff;
+            color: white;
+            border-radius: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: #1a1a40ff;
+        }
+
+            .submit-wrapper {
+                display: flex;
+                justify-content: center;
+            }
+
+            .custom-submit {
+                background-color: #2a2a55ff;
+                color: white;
+                border-radius: 0.5rem;
+                padding: 0.6rem 1.5rem;
+                font-weight: 600;
+                border: none;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+                font-size: 1rem;
+            }
+
+            .custom-submit:hover {
+                background-color: #1a1a40ff;
+            }
     `
     ];
 
@@ -108,25 +178,8 @@ export class ReaderEditElement extends View<Model, Msg> {
         super("episode:model");
     }
 
-    attributeChangedCallback(
-        name: string,
-        old: string | null,
-        value: string | null
-    ) {
-        super.attributeChangedCallback(name, old, value);
-
-        if (name === "username" && old !== value && value)
-            this.dispatchMessage([
-                "profile/select",
-                { username: value }
-            ]);
-    }
-
     handleSubmit(event: Form.SubmitEvent<Reader>) {
-        if (!this.username) {
-            console.error("Username is not set, cannot save profile.");
-            return;
-        }
+        if (!this.username) return;
 
         const profileData = {
             ...event.detail,
@@ -141,62 +194,39 @@ export class ReaderEditElement extends View<Model, Msg> {
                 onSuccess: () => {
                     History.dispatch(this, "history/navigate", {
                         href: `/app/profiles/${this.username}`
-                        /*href: `/app/profiles/${event.detail.username}`*/
                     });
                 },
-                onFailure: (error: Error) =>
-                    console.log("ERROR:", error)
+                onFailure: (error: Error) => console.log("ERROR:", error)
             }
         ]);
     }
 
-    firstUpdated() {
-        if (this.username) {
-            this.dispatchMessage(["profile/select", { username: this.username }]);
-        }
-    }
-
     _handleFileSelected(ev: Event) {
-        const target = ev.target as HTMLInputElement;
-        const selectedFile = (target.files as FileList)[0];
+        const input = ev.target as HTMLInputElement;
+        const file = input.files?.[0];
+        if (!file) return;
 
-        const reader: Promise<ArrayBuffer> = new Promise(
-            (resolve, reject) => {
-                const fr = new FileReader();
-                fr.onload = () => resolve(fr.result as ArrayBuffer);
-                fr.onerror = (err) => reject(err);
-                fr.readAsArrayBuffer(selectedFile);
-            }
-        );
-
-        reader.then((buffer: ArrayBuffer) => {
-            const { name, size, type } = selectedFile;
-            const query = new URLSearchParams({ filename: name });
+        const reader = new FileReader();
+        reader.onload = () => {
+            const buffer = reader.result as ArrayBuffer;
             const url = new URL("/images", document.location.origin);
-            url.search = query.toString();
+            url.searchParams.set("filename", file.name);
 
-            console.log("Uploading file:", selectedFile);
-            fetch(url, {
+            fetch(url.toString(), {
                 method: "POST",
                 headers: {
-                    "Content-Type": type,
-                    "Content-Length": size.toString()
+                    "Content-Type": file.type,
+                    "Content-Length": file.size.toString()
                 },
                 body: buffer
             })
-                .then((res) => {
-                    if (res.status === 201) return res.json();
-                    else throw res.status;
+                .then(res => res.status === 201 ? res.json() : Promise.reject(res.status))
+                .then((json: { url: string }) => {
+                    this.image = json.url;
                 })
-                .then((json: { url: string } | undefined) => {
-                    if (json) {
-                        console.log("Image has been uploaded to", json.url);
-                        this.image = json.url;
-                    } else throw "No JSON response";
-                })
-                .catch((error) => {
-                    console.log("Upload failed", error);
-                });
-        });
+                .catch(err => console.log("Upload failed", err));
+        };
+        reader.onerror = (err) => console.log("File reading error", err);
+        reader.readAsArrayBuffer(file);
     }
 }

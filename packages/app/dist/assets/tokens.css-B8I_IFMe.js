@@ -1,6 +1,6 @@
 import{i as r}from"./reset.css-BPlqXxCa.js";const o=r`
     body {
-        background-color: var(--color-background-page);
+        background-color: #fde9f3;
         margin: 0;
         padding: 0;
     }
@@ -118,7 +118,7 @@ import{i as r}from"./reset.css-BPlqXxCa.js";const o=r`
     :host, :root {
         --color-background-header: var(--color-text-heading);
         --color-header-text: rgb(255, 255, 255);
-        --color-background-page: rgb(255, 255, 255);
+        --color-background-page: #fde9f3;
         --color-accent: rgb(99, 129, 177);
         --color-accent-inverted: var(--color-link);
         --color-link: var(--color-text-heading);
@@ -140,4 +140,4 @@ import{i as r}from"./reset.css-BPlqXxCa.js";const o=r`
         --background-color-stories-homepage: rgb(37, 86, 142);
         --episode-logo-gradient: linear-gradient(to right,#cc6f54, #c76a9f, #8a6bd6, #438eb4);
     }
-`,c={styles:e};export{t as p,c as t};
+`,i={styles:e};export{t as p,i as t};

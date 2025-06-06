@@ -2,7 +2,7 @@ import { css } from "lit";
 
 const styles = css`
     body {
-        background-color: var(--color-background-page);
+        background-color: #fde9f3;
         margin: 0;
         padding: 0;
     }

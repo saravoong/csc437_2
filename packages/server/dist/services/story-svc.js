@@ -32,7 +32,7 @@ const StorySchema = new import_mongoose.Schema(
     storyTitle: { type: String, required: true, trim: true },
     communityOrOfficial: { type: String, required: true, trim: true },
     storyLink: String,
-    storyPath: { type: String, required: true, trim: true },
+    storyPath: String,
     synopsis: String,
     chapters: [import_chapter_svc.ChapterSchema]
   },
@@ -65,6 +65,11 @@ function getChapter(storyPath, chapterNumber) {
   });
 }
 function create(json) {
+  if (json.chapters && json.chapters.length > 0) {
+    json.chapters.forEach((chapter) => {
+      chapter.href = `./chapters/${String(chapter.chapterNumber)}.html`;
+    });
+  }
   const t = new StoryModel(json);
   return t.save();
 }
@@ -83,4 +88,13 @@ function remove(storyPath) {
     }
   );
 }
-var story_svc_default = { index, get, getChapter, create, update, remove };
+async function addComment(storyPath, chapterNumber, comment) {
+  const story = await StoryModel.findOne({ storyPath });
+  if (!story) throw new Error("Story not found");
+  const chapter = story.chapters.find((ch) => ch.chapterNumber === chapterNumber);
+  if (!chapter) throw new Error("Chapter not found");
+  chapter.comments.push(comment);
+  await story.save();
+  return chapter;
+}
+var story_svc_default = { index, get, getChapter, create, update, remove, addComment };

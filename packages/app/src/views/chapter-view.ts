@@ -10,6 +10,12 @@ export class ChapterViewElement extends LitElement {
     @state() story?: Story;
     @state() selectedChapter?: Chapter;
 
+    @state()
+    newComment = "";
+
+    @state()
+    errorMessage = "";
+
     connectedCallback() {
         super.connectedCallback();
 
@@ -50,28 +56,73 @@ export class ChapterViewElement extends LitElement {
         }
     }
 
-    render() {
+    async handleAddComment() {
+        if (!this.storyPath || !this.chapterNumber || !this.newComment.trim()) return;
 
+        this.errorMessage = "";
+
+        try {
+            const res = await fetch(
+                `/api/stories/${this.storyPath}/chapters/${this.chapterNumber}/comments`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ comment: this.newComment.trim() }),
+                }
+            );
+
+            if (!res.ok) {
+                const errText = await res.text();
+                throw new Error(errText || "Failed to submit comment");
+            }
+
+            // Optionally, get the updated chapter or comments from response
+            const updatedChapter = await res.json();
+
+            this.selectedChapter = updatedChapter;
+            this.newComment = "";
+        } catch (err) {
+            this.errorMessage = err instanceof Error ? err.message : "Unknown error";
+        }
+    }
+
+
+    render() {
         if (!this.selectedChapter) {
             return html`<p>Loading chapter...</p>`;
         }
 
-        // Use optional chaining and fallback defaults to avoid undefined errors
         const chapter = this.selectedChapter;
 
         return html`
-            <section>
+            <section class="chapter-container">
                 <header>
-                    <a href="/app/stories/${this.storyPath}">&larr; Back</a>
-                    <h1>
-                        Chapter ${chapter.chapterNumber} (${chapter.storyTitle ?? "Untitled"})
-                    </h1>
+                    <a href="/app/stories/${this.storyPath}">&larr; Back to Story</a>
+                    <h1>Chapter ${chapter.chapterNumber} — ${chapter.storyTitle ?? "Untitled"}</h1>
                 </header>
-                <section>
+
+                <section class="summary">
                     <h3>Summary</h3>
                     <p>${chapter.summary ?? "No summary available."}</p>
                 </section>
-                <section>
+                
+                <section class="add-comment">
+                  <h3>Add a Comment</h3>
+                  <textarea
+                    .value=${this.newComment}
+                    @input=${(e: Event) => this.newComment = (e.target as HTMLTextAreaElement).value}
+                    placeholder="Write your comment here..."
+                    rows="4"
+                  ></textarea>
+                  <button @click=${this.handleAddComment} ?disabled=${!this.newComment.trim()}>
+                    Submit
+                  </button>
+                  ${this.errorMessage ? html`<p class="error">${this.errorMessage}</p>` : ""}
+                </section>
+
+                <section class="comments">
                     <h3>Comments</h3>
                     ${chapter.comments && chapter.comments.length > 0
                             ? chapter.comments.map((comment) => html`<p>${comment}</p>`)
@@ -82,35 +133,91 @@ export class ChapterViewElement extends LitElement {
     }
 
     static styles = css`
-    a {
-      color: steelblue;
-      font-weight: bold;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    h1 {
-      font-size: 2rem;
-      border-bottom: 2px solid steelblue;
-      padding-bottom: 0.25em;
-    }
-    section {
-      margin-bottom: 1.5em;
-    }
-    p {
-      line-height: 1.4;
-    }
-    button {
-      background-color: steelblue;
-      color: white;
-      border: none;
-      padding: 0.5em 1em;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    button:hover {
-      background-color: #1c4a8b;
-    }
-  `;
+        .chapter-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+            padding: 2rem 3rem;
+            color: #444c6b;
+            font-family: "Baloo 2", cursive;
+        }
+
+        header a {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: var(--accent-color, steelblue);
+            font-weight: 600;
+            text-decoration: none;
+            font-family: "Comfortaa", cursive;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+        header a:hover,
+        header a:focus {
+            text-decoration: underline;
+            color: darken(var(--accent-color, steelblue), 15%);
+        }
+
+        header h1 {
+            font-family: "Comfortaa", cursive;
+            font-weight: 700;
+            font-size: 2.25rem;
+            margin: 0 0 2rem 0;
+            color: var(--accent-color, steelblue);
+        }
+
+        section h3 {
+            font-family: "Comfortaa", cursive;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--accent-color, steelblue);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.125rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            color: #444c6b;
+            font-family: "Baloo 2", cursive;
+        }
+
+        .add-comment textarea {
+            width: 100%;
+            font-family: "Baloo 2", cursive;
+            font-size: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+            resize: vertical;
+            margin-bottom: 0.75rem;
+            box-sizing: border-box;
+        }
+
+        .add-comment button {
+            background-color: var(--accent-color, steelblue);
+            color: white;
+            border: none;
+            padding: 0.5em 1.2em;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-family: "Comfortaa", cursive;
+            font-size: 1rem;
+        }
+
+        .add-comment button:disabled {
+            background-color: #a0a8b9;
+            cursor: not-allowed;
+        }
+
+        .add-comment .error {
+            color: crimson;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+    `;
 }

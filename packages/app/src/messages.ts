@@ -1,4 +1,4 @@
-import { Reader } from "../../server/src/models/models.ts";
+import { Reader, Story } from "../../server/src/models/models.ts";
 
 export type Msg =
     | [
@@ -10,4 +10,19 @@ export type Msg =
         onFailure?: (err: Error) => void;
     }
     ]
-    | ["profile/select", { username: string }];
+    | ["profile/select", { username: string } ]
+    | ["story/save",
+    {
+        story: Story;
+        onSuccess?: () => void;
+        onFailure?: (err: Error) => void
+    } ]
+    | ["chapter/comment/add",
+        {
+            storyPath: string;
+            chapterNumber: number;
+            comment: string;
+            onSuccess?: () => void;
+            onFailure?: (err: Error) => void;
+        }
+];

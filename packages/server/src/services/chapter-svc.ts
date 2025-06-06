@@ -6,7 +6,6 @@ export const ChapterSchema = new Schema<Chapter>(
         storyTitle: { type: String, required: true, trim: true },
         chapterNumber: { type: Number, required: true },
         title: String,
-        href: { type: String, required: true, trim: true },
         summary: String,
         comments: { type: [String], default: [] }
     },

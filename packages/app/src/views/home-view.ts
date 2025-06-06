@@ -54,20 +54,6 @@ export class HomeViewElement extends LitElement {
         </div>
       </section>
 
-      <hr />
-
-      <section class="Stories">
-        <h2>All Stories</h2>
-        <div class="stories-grid">
-          <a href="app/stories/catching_feelings">Catching Feelings</a>
-          <a href="app/stories/blood_lust">Blood Lust</a>
-          <a href="app/stories/rule_breaker">Rule Breaker</a>
-          <a href="app/stories/aligning_the_stars">Aligning the Stars</a>
-          <a href="app/stories/itll_be_our_secret">It'll Be Our Secret</a>
-          <a href="app/stories/love_life">Love Life</a>
-          <a href="app/stories/bad_meets_bad">Bad Meets Bad</a>
-        </div>
-      </section>
     `;
     }
 

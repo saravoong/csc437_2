@@ -11,7 +11,7 @@ const StorySchema = new Schema<Story>(
         storyTitle: { type: String, required: true, trim: true },
         communityOrOfficial: { type: String, required: true, trim: true },
         storyLink: String,
-        storyPath: { type: String, required: true, trim: true },
+        storyPath: String,
         synopsis: String,
         chapters: [ChapterSchema]
     },
@@ -53,6 +53,13 @@ function getChapter(storyPath: String, chapterNumber: Number): Promise<Chapter> 
 }
 
 function create(json: Story): Promise<Story> {
+    // Add href to each chapter before saving
+    if (json.chapters && json.chapters.length > 0) {
+        json.chapters.forEach((chapter) => {
+            chapter.href = `./chapters/${String(chapter.chapterNumber)}.html`;
+        });
+    }
+
     const t = new StoryModel(json);
     return t.save();
 }
@@ -77,4 +84,17 @@ function remove(storyPath: String): Promise<void> {
     );
 }
 
-export default { index, get, getChapter, create, update, remove };
+async function addComment(storyPath: string, chapterNumber: number, comment: string): Promise<Chapter> {
+    const story = await StoryModel.findOne({ storyPath });
+    if (!story) throw new Error("Story not found");
+
+    const chapter = story.chapters.find(ch => ch.chapterNumber === chapterNumber);
+    if (!chapter) throw new Error("Chapter not found");
+
+    chapter.comments.push(comment);
+    await story.save();
+
+    return chapter;
+}
+
+export default { index, get, getChapter, create, update, remove, addComment };

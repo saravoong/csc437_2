@@ -22,10 +22,6 @@ function toggleDarkMode(ev: InputEvent) {
     Events.relay(ev, "dark-mode", { checked });
 }
 
-function signOut(ev: MouseEvent) {
-    Events.relay(ev, "auth:message", ["auth/signout"]);
-}
-
 export class HeaderElement extends View<Model, Msg> {
     static uses = define({
         "mu-dropdown": Dropdown.Element
@@ -48,42 +44,56 @@ export class HeaderElement extends View<Model, Msg> {
 
     protected render() {
         const displayName = this.username || "episodian";
-        const profilePicture = this.profile?.profilePicture || "/assets/profile.jpg";
+        const profilePicture = this.profile?.profilePicture || "/assets/defaultpfp.png";
         const color = this.profile?.color || "#ccc";
 
         return html`
             <header class="front-page-header">
                 <div class="left-group">
                     <img src="/assets/logo.png" alt="Episode Logo" class="logo" />
+                    <nav class="nav-links">
+                        <a href="/app">Home</a>
+                        <a href="/app/stories">All Stories</a>
+                        <a
+                                @click=${() => {
+                                    if (this.loggedIn && this.username) {
+                                        location.assign(`/app/profiles/${this.username}`);
+                                    } else {
+                                        location.assign("/login.html");
+                                    }
+                                }}
+                                style="cursor: pointer;">
+                            My Profile
+                        </a>
+                        
+                        <a href="/about">About</a>
+                    </nav>
                 </div>
-
-                <mu-dropdown>
-                    <img
-                            slot="actuator"
-                            src=${profilePicture}
-                            alt="Profile Picture"
-                            class="profile-pic"
-                            style="border: 2px solid ${color}"
-                    />
-                    <menu>
-                        <li class="user-name"><b>${displayName}</b></li>
-                        <li>
-                            <a href="/app/profiles/${this.username}">View Profile</a>
-                        </li>
-                        <li>
-                            <label class="dark-toggle">
-                                <input type="checkbox" @change=${toggleDarkMode} />
-                                Dark Mode
-                            </label>
-                        </li>
-                        <li class="when-signed-in">
-                            <a id="signout" @click=${signOut}>Sign Out</a>
-                        </li>
-                        <li class="when-signed-out">
-                            <a href="/login">Sign In</a>
-                        </li>
-                    </menu>
-                </mu-dropdown>
+                <div class="right-group">
+                    <span class="greeting-text">hey, ${displayName}!</span>
+                    <mu-dropdown>
+                        <img
+                                slot="actuator"
+                                src=${profilePicture}
+                                alt="Profile Picture"
+                                class="profile-pic"
+                                style="border: 2px solid ${color}"
+                        />
+                        <menu>
+                            <li>
+                                <label class="dark-toggle">
+                                    <input type="checkbox" @change=${toggleDarkMode} />
+                                    Dark Mode
+                                </label>
+                            </li>
+                            <li>
+                                ${this.loggedIn
+                                        ? this.renderSignOutButton()
+                                        : this.renderSignInButton()}
+                            </li>
+                        </menu>
+                    </mu-dropdown>
+                </div>
             </header>
         `;
     }
@@ -95,19 +105,20 @@ export class HeaderElement extends View<Model, Msg> {
         headings.styles,
         css`
             .front-page-header {
-                background-color: #eeeef6ff;
+                background-color: white;
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: space-between; /* space between left and right groups */
                 padding: 0.5rem 1.5rem;
                 box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-                border-bottom: 4px solid white; 
+                border-bottom: 3px solid #f792c8;
                 position: relative;
                 z-index: 10;
+                font-family: "Comfortaa", sans-serif;
             }
 
             .logo {
-                height: 40px;
+                height: 70px;
             }
 
             mu-dropdown {
@@ -115,8 +126,8 @@ export class HeaderElement extends View<Model, Msg> {
             }
 
             .profile-pic {
-                width: 40px;
-                height: 40px;
+                width: 70px;
+                height: 70px;
                 border-radius: 50%;
                 object-fit: cover;
                 padding: 4px;
@@ -129,7 +140,16 @@ export class HeaderElement extends View<Model, Msg> {
                 display: flex;
                 flex-direction: column;
                 gap: 0.5rem;
-                padding: 0.75rem;
+                padding: 0.75rem 1rem;
+                background-color: white;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                min-width: 180px;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                z-index: 100;
             }
 
             .dark-toggle {
@@ -138,8 +158,73 @@ export class HeaderElement extends View<Model, Msg> {
                 gap: 0.5rem;
                 font-size: 0.9rem;
             }
-        `
-    ];
+            
+            .nav-links {
+                display: flex;
+                gap: 1.25rem;
+                align-items: center;
+                font-weight: 500;
+                margin-left: 1rem;
+                font-family: "Comfortaa", sans-serif;
+            }
+
+            .nav-links a {
+                text-decoration: none;
+                color: #1a1a40;
+                font-size: 1rem;
+                transition: color 0.2s ease;
+            }
+
+            .nav-links a:hover {
+                color: #f792c8;
+                font-weight: bold;
+            }
+
+            .left-group {
+                display: flex;
+                align-items: center;
+                gap: 1.5rem; 
+            }
+
+            .right-group {
+                display: flex;
+                align-items: center;
+                gap: 0.8rem; 
+            }
+            
+            a {
+                font-family: "Comfortaa", sans-serif;
+            }
+
+            .greeting-text {
+                color: #1a1a40;
+                white-space: nowrap;
+                font-size: 1rem;
+                font-weight: bold;
+            }
+
+            button {
+                width: 100%;
+                max-width: 280px;
+                align-self: center;
+                padding: 0.75rem 1.5rem;
+                background-color: #2a2a55ff;
+                color: white;
+                border: none;
+                border-radius: 0.75rem;
+                font-size: 1rem;
+                font-weight: 600;
+                font-family: inherit;
+                cursor: pointer;
+                transition: background-color 0.25s ease, transform 0.1s ease;
+                margin-top: 1rem;
+            }
+
+            button:hover:enabled {
+                background-color: #1a1a40ff;
+                transform: scale(1.02);
+            }
+        `];
 
     _authObserver = new Observer<Auth.Model>(
         this,
@@ -176,5 +261,27 @@ export class HeaderElement extends View<Model, Msg> {
                 (event as CustomEvent).detail?.checked
             )
         );
+    }
+
+    renderSignOutButton() {
+        return html`
+            <button
+                    @click=${(e: UIEvent) => {
+            Events.relay(e, "auth:message", ["auth/signout"]);
+        }}
+            >
+                Sign Out
+            </button>
+        `;
+    }
+
+    renderSignInButton() {
+        return html`
+            <button @click=${() => {
+            window.location.href = "/login.html";
+        }}>
+                Sign In
+            </button>
+        `;
     }
 }

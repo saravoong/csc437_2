@@ -71,7 +71,6 @@ export class StoryTemplateElement extends LitElement {
                     </section>
                     <hr>
                     <section>
-                        <h3>Rating</h3>
                         <h3>Reviews</h3>
                     </section>
                     <section>
