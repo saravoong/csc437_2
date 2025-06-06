@@ -160,18 +160,22 @@ export class ReviewsViewElement extends View<Model, Msg> {
         return html`
       <section>
         <h3>Reviews</h3>
-        <textarea
-          .value=${this.newComment}
-          @input=${(e: InputEvent) =>
-            (this.newComment = (e.target as HTMLTextAreaElement).value)}
-        ></textarea>
-        <button
-          @click=${this.handleSubmit}
-          ?disabled=${!this.newComment.trim() }
-        >
-          Submit Review
-        </button>
-        ${this.errorMessage ? html`<p class="error">${this.errorMessage}</p>` : ""}
+          ${this.profile
+                  ? html`
+      <textarea
+        .value=${this.newComment}
+        @input=${(e: InputEvent) =>
+                          (this.newComment = (e.target as HTMLTextAreaElement).value)}
+      ></textarea>
+      <button
+        @click=${this.handleSubmit}
+        ?disabled=${!this.newComment.trim()}
+      >
+        Submit Review
+      </button>
+    `
+                  : html`<p><em>You must be signed in to leave a review.</em></p>`}
+          ${this.errorMessage ? html`<p class="error">${this.errorMessage}</p>` : ""}
         ${this.reviews.length
             ? html`<ul>
               ${this.reviews.map(
