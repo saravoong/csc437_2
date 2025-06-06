@@ -513,7 +513,7 @@ import{a as x,i as c,V as $,O as V,d as D,b as ee,x as n,r as g,e as K,c as l,f 
             }
 
             img {
-                width: 70%;
+                width: 50%;
                 height: auto;
                 border-radius: 0.75rem;
                 margin-bottom: 1rem;
@@ -1354,7 +1354,7 @@ import{a as x,i as c,V as $,O as V,d as D,b as ee,x as n,r as g,e as K,c as l,f 
 
             img.preview {
                 max-width: 100%;
-                
+                max-height: 240px;
                 margin-top: 0.5rem;
                 border-radius: 0.75rem;
                 border: 1px solid #ccc;

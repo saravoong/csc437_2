@@ -112,7 +112,6 @@ export class AddStoryFormElement extends View<any, any> {
 
         const reader = new FileReader();
         reader.onload = () => {
-            // For simplicity, we'll just use base64 here; adapt as needed
             this.formData = { ...this.formData, "img-src": reader.result as string };
         };
         reader.readAsDataURL(file);
@@ -216,7 +215,7 @@ export class AddStoryFormElement extends View<any, any> {
 
             img.preview {
                 max-width: 100%;
-                
+                max-height: 240px;
                 margin-top: 0.5rem;
                 border-radius: 0.75rem;
                 border: 1px solid #ccc;

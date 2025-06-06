@@ -44,7 +44,7 @@ export class StoryViewElement extends View<Model, Msg> {
             }
 
             img {
-                width: 70%;
+                width: 50%;
                 height: auto;
                 border-radius: 0.75rem;
                 margin-bottom: 1rem;

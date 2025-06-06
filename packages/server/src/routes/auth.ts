@@ -42,8 +42,6 @@ router.post("/register", (req: Request, res: Response) => {
         credentials
             .create(username, password)
             .then((creds) => {
-                // Step 1: Credentials created
-                // Step 2: Create profile entry
                 return Readers.create({
                     username: creds.username,
                     profilePicture: "",
@@ -84,7 +82,6 @@ export function authenticateUser(
     next: NextFunction
 ) {
     const authHeader = req.headers["authorization"];
-    //Getting the 2nd part of the auth header (the token)
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) {
