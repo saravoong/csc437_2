@@ -66,7 +66,6 @@ export class HeaderElement extends View<Model, Msg> {
                             My Profile
                         </a>
                         
-                        <a href="/about">About</a>
                     </nav>
                 </div>
                 <div class="right-group">

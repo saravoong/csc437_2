@@ -160,8 +160,7 @@ export class ReviewsViewElement extends View<Model, Msg> {
         return html`
       <section>
         <h3>Reviews</h3>
-          ${this.profile
-                  ? html`
+          ${this.profile ? html`
       <textarea
         .value=${this.newComment}
         @input=${(e: InputEvent) =>

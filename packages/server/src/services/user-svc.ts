@@ -6,7 +6,7 @@ const UserSchema = new Schema<Reader>(
     {
         username: { type: String, required: true, trim: true },
         profilePicture: String,
-        color: String
+        color: String,
     },
     { collection: "users" }
 );

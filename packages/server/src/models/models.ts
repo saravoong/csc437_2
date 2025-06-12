@@ -12,13 +12,19 @@ export interface Story {
     reviews: Review[];
 }
 
+export interface Comment {
+    username: string;
+    text: string;
+    date: Date | string;
+}
+
 export interface Chapter {
     storyTitle: string;
     chapterNumber: number;
     title: string;
     href: string;
     summary: string;
-    comments: string[];
+    comments: Comment[];
 }
 
 export interface Reader {

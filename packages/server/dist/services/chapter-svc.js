@@ -23,13 +23,21 @@ __export(chapter_svc_exports, {
 });
 module.exports = __toCommonJS(chapter_svc_exports);
 var import_mongoose = require("mongoose");
+const CommentSchema = new import_mongoose.Schema(
+  {
+    username: { type: String, required: true },
+    text: { type: String, required: true },
+    date: { type: Date, default: Date.now }
+  },
+  { _id: false }
+);
 const ChapterSchema = new import_mongoose.Schema(
   {
     storyTitle: { type: String, required: true, trim: true },
     chapterNumber: { type: Number, required: true },
     title: String,
     summary: String,
-    comments: { type: [String], default: [] }
+    comments: { type: [CommentSchema], default: [] }
   },
   { collection: "chapters" }
 );

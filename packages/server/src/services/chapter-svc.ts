@@ -1,5 +1,14 @@
 import { Schema, model } from "mongoose";
-import {Chapter, Story} from "../models/models"
+import { Chapter, Story } from "../models/models"
+
+const CommentSchema = new Schema(
+    {
+        username: { type: String, required: true },
+        text: { type: String, required: true },
+        date: { type: Date, default: Date.now }
+    },
+    { _id: false }
+);
 
 export const ChapterSchema = new Schema<Chapter>(
     {
@@ -7,7 +16,7 @@ export const ChapterSchema = new Schema<Chapter>(
         chapterNumber: { type: Number, required: true },
         title: String,
         summary: String,
-        comments: { type: [String], default: [] }
+        comments: { type: [CommentSchema], default: [] }
     },
     { collection: "chapters" }
 );

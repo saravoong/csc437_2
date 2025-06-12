@@ -17,11 +17,6 @@ export class StoryViewElement extends View<Model, Msg> {
     @state()
     story?: Story;
 
-    @state()
-    get profile() {
-        return this.model.profile;
-    }
-
     static styles = [
         reset.styles,
         css`
@@ -285,7 +280,6 @@ export class StoryViewElement extends View<Model, Msg> {
 
                     <div class="right-column">
                         <section>
-                    <h3>Reviews</h3>
                 </section>
 
                         <section>
@@ -303,9 +297,9 @@ export class StoryViewElement extends View<Model, Msg> {
                                 )}
                             </ul>
                         </section>
+                        <reviews-view .storyPath=${this.storyPath}></reviews-view>
                     </div>
                 </div>
-                <reviews-view .storyPath=${this.storyPath}></reviews-view>
             </section>
         `;
     }

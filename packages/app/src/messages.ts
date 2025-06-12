@@ -18,13 +18,13 @@ export type Msg =
         onFailure?: (err: Error) => void
     } ]
     | ["chapter/comment/add",
-        {
-            storyPath: string;
-            chapterNumber: number;
-            comment: string;
-            onSuccess?: () => void;
-            onFailure?: (err: Error) => void;
-        }]
+    {
+        storyPath: string;
+        chapterNumber: number;
+        comment: { username: string; text: string };
+        onSuccess?: () => void;
+        onFailure?: (err: Error) => void;
+    }]
     | ["story/review/add", {
             storyPath: string;
             review: Review & { username: string };

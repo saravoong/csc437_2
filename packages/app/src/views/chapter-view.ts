@@ -1,9 +1,16 @@
-import { html, css, LitElement } from "lit";
+import { html, css } from "lit";
 import { property, state } from "lit/decorators.js";
+import { Story, Chapter, Reader } from "../../../server/src/models/models.ts";
+import { View } from "@calpoly/mustang";
+import { Model } from "../model";
+import { Msg } from "../messages";
 
-import type { Story, Chapter } from "../../../server/src/models/models.ts";
+export class ChapterViewElement extends View<Model, Msg> {
+    get profile(): Reader | undefined {
+        console.log("Current profile:", this.model.profile);
+        return this.model.profile;
+    }
 
-export class ChapterViewElement extends LitElement {
     @property({ attribute: "storypath" }) storyPath?: string;
     @property({ type: Number, attribute: "chapternumber" }) chapterNumber = 0;
 
@@ -57,9 +64,14 @@ export class ChapterViewElement extends LitElement {
     }
 
     async handleAddComment() {
-        if (!this.storyPath || !this.chapterNumber || !this.newComment.trim()) return;
+        if (!this.storyPath || !this.chapterNumber || !this.newComment.trim()) {
+            return;
+        }
 
         this.errorMessage = "";
+
+        const username = this.profile?.username || "Anonymous";
+        console.log("Username:", username);
 
         try {
             const res = await fetch(
@@ -69,16 +81,18 @@ export class ChapterViewElement extends LitElement {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ comment: this.newComment.trim() }),
+                    body: JSON.stringify({
+                        username: username,
+                        text: this.newComment.trim()
+                    })
                 }
             );
 
             if (!res.ok) {
                 const errText = await res.text();
-                throw new Error(errText || "Failed to submit comment");
+                console.error("Error response:", errText);
             }
 
-            // Optionally, get the updated chapter or comments from response
             const updatedChapter = await res.json();
 
             this.selectedChapter = updatedChapter;
@@ -87,6 +101,7 @@ export class ChapterViewElement extends LitElement {
             this.errorMessage = err instanceof Error ? err.message : "Unknown error";
         }
     }
+
 
 
     render() {
@@ -125,11 +140,23 @@ export class ChapterViewElement extends LitElement {
                 <section class="comments">
                     <h3>Comments</h3>
                     ${chapter.comments && chapter.comments.length > 0
-                            ? chapter.comments.map((comment) => html`<p>${comment}</p>`)
+                            ? chapter.comments.map(comment => html`
+                                <div class="comment">
+                                    <p class="meta">
+                                        <strong>${comment.username}</strong>
+                                        <span> • ${new Date(comment.date).toLocaleDateString()}</span>
+                                    </p>
+                                    <p class="text">${comment.text}</p>
+                                </div>
+                            `)
                             : html`<p>No comments yet.</p>`}
                 </section>
             </section>
         `;
+    }
+
+    constructor() {
+        super("episode:model");
     }
 
     static styles = css`

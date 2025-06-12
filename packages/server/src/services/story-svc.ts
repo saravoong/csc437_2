@@ -93,14 +93,24 @@ function remove(storyPath: String): Promise<void> {
     );
 }
 
-async function addComment(storyPath: string, chapterNumber: number, comment: string): Promise<Chapter> {
+async function addComment(
+    storyPath: string,
+    chapterNumber: number,
+    comment: { username: string; text: string }
+): Promise<Chapter> {
     const story = await StoryModel.findOne({ storyPath });
     if (!story) throw new Error("Story not found");
 
     const chapter = story.chapters.find(ch => ch.chapterNumber === chapterNumber);
     if (!chapter) throw new Error("Chapter not found");
 
-    chapter.comments.push(comment);
+    chapter.comments = chapter.comments || [];
+    chapter.comments.push({
+        username: comment.username,
+        text: comment.text,
+        date: new Date()
+    });
+
     await story.save();
 
     return chapter;

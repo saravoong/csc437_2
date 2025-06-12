@@ -38,6 +38,25 @@ const router = import_express.default.Router();
 router.get("/", (_, res) => {
   import_story_svc.default.index().then((list) => res.json(list)).catch((err) => res.status(500).send(err));
 });
+router.get("/trending", async (_, res) => {
+  try {
+    const allStories = await import_story_svc.default.index();
+    const now = /* @__PURE__ */ new Date();
+    const trendingStories = allStories.filter(
+      (story) => story.chapters.some(
+        (chapter) => chapter.comments.some((comment) => {
+          const commentDate = new Date(comment.date);
+          const timeDiff = now.getTime() - commentDate.getTime();
+          const daysAgo = timeDiff / (1e3 * 60 * 60 * 24);
+          return daysAgo <= 3;
+        })
+      )
+    );
+    res.json(trendingStories);
+  } catch (err) {
+    res.status(500).send(err instanceof Error ? err.message : err);
+  }
+});
 router.get("/:storyPath", (req, res) => {
   const { storyPath } = req.params;
   import_story_svc.default.get(storyPath).then((story) => res.json(story)).catch((err) => res.status(404).send(err));
@@ -67,9 +86,9 @@ router.get("/:storyPath/chapters/:chapterNumber", (req, res) => {
 });
 router.post("/:storyPath/chapters/:chapterNumber/comments", async (req, res) => {
   const { storyPath, chapterNumber } = req.params;
-  const { comment } = req.body;
+  const { username, text } = req.body;
   try {
-    const updatedChapter = await import_story_svc.default.addComment(storyPath, Number(chapterNumber), comment);
+    const updatedChapter = await import_story_svc.default.addComment(storyPath, Number(chapterNumber), { username, text });
     res.json(updatedChapter);
   } catch (err) {
     res.status(404).send(err instanceof Error ? err.message : err);

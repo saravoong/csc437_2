@@ -195,7 +195,7 @@ function addComment(
     msg: {
         storyPath: string;
         chapterNumber: number;
-        comment: string;
+        comment: { username: string; text: string };
     },
     user: Auth.User
 ) {
@@ -205,7 +205,7 @@ function addComment(
             "Content-Type": "application/json",
             ...Auth.headers(user),
         },
-        body: JSON.stringify({ comment: msg.comment }),
+        body: JSON.stringify(msg.comment), // send the object { username, text }
     }).then((response: Response) => {
         if (response.ok) return response.json();
         else throw new Error(`Failed to add comment`);

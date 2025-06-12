@@ -11,6 +11,29 @@ router.get("/", (_, res: Response) => {
         .catch((err) => res.status(500).send(err));
 });
 
+router.get("/trending", async (_, res: Response) => {
+    try {
+        const allStories = await Stories.index();
+
+        const now = new Date();
+        const trendingStories = allStories.filter((story) =>
+            story.chapters.some((chapter) =>
+                chapter.comments.some((comment) => {
+                    const commentDate = new Date(comment.date);
+                    const timeDiff = now.getTime() - commentDate.getTime();
+                    const daysAgo = timeDiff / (1000 * 60 * 60 * 24);
+                    return daysAgo <= 3;
+                })
+            )
+        );
+
+        res.json(trendingStories);
+    } catch (err) {
+        res.status(500).send(err instanceof Error ? err.message : err);
+    }
+});
+
+
 router.get("/:storyPath", (req: Request, res: Response) => {
     const { storyPath } = req.params;
 
@@ -52,10 +75,10 @@ router.get("/:storyPath/chapters/:chapterNumber", (req: Request, res: Response) 
 
 router.post("/:storyPath/chapters/:chapterNumber/comments", async (req: Request, res: Response) => {
     const { storyPath, chapterNumber } = req.params;
-    const { comment } = req.body;
+    const { username, text } = req.body;
 
     try {
-        const updatedChapter = await Stories.addComment(storyPath, Number(chapterNumber), comment);
+        const updatedChapter = await Stories.addComment(storyPath, Number(chapterNumber), { username, text });
         res.json(updatedChapter);
     } catch (err) {
         res.status(404).send(err instanceof Error ? err.message : err);

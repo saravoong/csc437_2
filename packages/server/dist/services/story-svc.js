@@ -100,7 +100,12 @@ async function addComment(storyPath, chapterNumber, comment) {
   if (!story) throw new Error("Story not found");
   const chapter = story.chapters.find((ch) => ch.chapterNumber === chapterNumber);
   if (!chapter) throw new Error("Chapter not found");
-  chapter.comments.push(comment);
+  chapter.comments = chapter.comments || [];
+  chapter.comments.push({
+    username: comment.username,
+    text: comment.text,
+    date: /* @__PURE__ */ new Date()
+  });
   await story.save();
   return chapter;
 }
