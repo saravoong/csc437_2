@@ -145,10 +145,11 @@ import{a as C,i as c,V as y,O as ee,d as D,b as te,x as n,r as g,e as X,c as l,f
                         />
                         <menu>
                             <li>
-                                <label class="dark-toggle">
-                                    <input type="checkbox" @change=${me} />
+                                <label @change=${me}>
+                                    <input type="checkbox" />
                                     Dark Mode
                                 </label>
+                                
                             </li>
                             <li>
                                 ${this.loggedIn?this.renderSignOutButton():this.renderSignInButton()}
@@ -298,7 +299,12 @@ import{a as C,i as c,V as y,O as ee,d as D,b as te,x as n,r as g,e as X,c as l,f
             `)}render(){return n`
             <episode-header></episode-header>
             <section>
-                <h2>Trending Stories Today</h2>
+                <div class="heading-with-icon">
+                    <h2>Trending Stories Today</h2>
+                    <svg class="icon star-icon">
+                        <use href="/icons/deco.svg#icon-star" />
+                    </svg>
+                </div>
                 ${this.loading?n`<p>Loading trending stories...</p>`:this.trendingStories.length>0?n`<div class="story-list">${this.renderStoryCards(this.trendingStories)}</div>`:n`<p>No trending stories at the moment.</p>`}
             </section>
         `}};v.styles=[I.styles,g.styles,A.styles,L.styles,c`
@@ -367,7 +373,35 @@ import{a as C,i as c,V as y,O as ee,d as D,b as te,x as n,r as g,e as X,c as l,f
             p {
                 font-family: "Comfortaa", sans-serif;
             }
-        `];U([l()],v.prototype,"trendingStories",2);U([l()],v.prototype,"loading",2);v=U([B("home-view")],v);var ge=Object.defineProperty,ye=Object.getOwnPropertyDescriptor,P=(r,e,t,a)=>{for(var o=a>1?void 0:a?ye(e,t):e,i=r.length-1,s;i>=0;i--)(s=r[i])&&(o=(a?s(e,t,o):s(o))||o);return a&&o&&ge(e,t,o),o};const J=class J extends y{constructor(){super("episode:model"),this.storyPath="",this.reviews=[],this.newComment="",this.errorMessage="",this.username="Testing for now"}get profile(){return this.model.profile}connectedCallback(){super.connectedCallback(),this.loadReviews()}updated(e){e.has("storyPath")&&this.loadReviews()}async loadReviews(){if(!this.storyPath){this.reviews=[];return}try{const e=await fetch(`/api/stories/${this.storyPath}/reviews`);if(!e.ok)throw new Error("Failed to load reviews");this.reviews=await e.json(),this.errorMessage=""}catch(e){this.errorMessage=e.message}}handleSubmit(){var o;if(!this.newComment.trim())return;this.errorMessage="";const t={username:((o=this.profile)==null?void 0:o.username)||"Anonymous",rating:1,comment:this.newComment.trim(),date:new Date},a=t.date instanceof Date?t.date.toISOString():t.date;this.dispatchMessage(["story/review/add",{storyPath:this.storyPath,review:{...t,date:a}}]),this.reviews=[t,...this.reviews],this.newComment=""}render(){return n`
+
+            .heading-with-icon {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-top: 2rem;
+            }
+
+            .heading-with-icon h2 {
+                margin: 0;
+            }
+
+            .icon.star-icon {
+                width: 1.5rem; 
+                height: 1.5rem;
+                fill: #FFD700;
+            }
+
+            body.dark-mode {
+                background-color: #121212;
+                color: #e0e0e0;
+            }
+
+            body.dark-mode a {
+                color: #bb86fc;
+            }
+
+
+        `];U([l()],v.prototype,"trendingStories",2);U([l()],v.prototype,"loading",2);v=U([B("home-view")],v);var ge=Object.defineProperty,ye=Object.getOwnPropertyDescriptor,k=(r,e,t,a)=>{for(var o=a>1?void 0:a?ye(e,t):e,i=r.length-1,s;i>=0;i--)(s=r[i])&&(o=(a?s(e,t,o):s(o))||o);return a&&o&&ge(e,t,o),o};const J=class J extends y{constructor(){super("episode:model"),this.storyPath="",this.reviews=[],this.newComment="",this.errorMessage="",this.username="Testing for now"}get profile(){return this.model.profile}connectedCallback(){super.connectedCallback(),this.loadReviews()}updated(e){e.has("storyPath")&&this.loadReviews()}async loadReviews(){if(!this.storyPath){this.reviews=[];return}try{const e=await fetch(`/api/stories/${this.storyPath}/reviews`);if(!e.ok)throw new Error("Failed to load reviews");this.reviews=await e.json(),this.errorMessage=""}catch(e){this.errorMessage=e.message}}handleSubmit(){var o;if(!this.newComment.trim())return;this.errorMessage="";const t={username:((o=this.profile)==null?void 0:o.username)||"Anonymous",rating:1,comment:this.newComment.trim(),date:new Date},a=t.date instanceof Date?t.date.toISOString():t.date;this.dispatchMessage(["story/review/add",{storyPath:this.storyPath,review:{...t,date:a}}]),this.reviews=[t,...this.reviews],this.newComment=""}render(){return n`
       <section>
         <h3>Reviews</h3>
           ${this.profile?n`
@@ -459,7 +493,7 @@ import{a as C,i as c,V as y,O as ee,d as D,b as te,x as n,r as g,e as X,c as l,f
         color: #888;
         margin-left: 0.5rem;
       }
-    `];let p=J;P([l()],p.prototype,"profile",1);P([d({type:String})],p.prototype,"storyPath",2);P([l()],p.prototype,"reviews",2);P([l()],p.prototype,"newComment",2);P([l()],p.prototype,"errorMessage",2);P([d({type:String})],p.prototype,"username",2);var be=Object.defineProperty,E=(r,e,t,a)=>{for(var o=void 0,i=r.length-1,s;i>=0;i--)(s=r[i])&&(o=s(e,t,o)||o);return o&&be(e,t,o),o};const q=class q extends y{constructor(){super(...arguments),this.mode="view"}connectedCallback(){super.connectedCallback(),this.storyPath&&this.loadStory()}updated(e){var t;if(e.has("storyPath")&&this.loadStory(),this.story){const a={Romance:"hotpink",Drama:"darkslategray",LGBTQ:"mediumorchid",Fantasy:"rebeccapurple",SciFi:"deepskyblue",Mystery:"darkslateblue",Comedy:"goldenrod",Action:"firebrick",Adventure:"teal",Thriller:"indigo",Horror:"crimson"},o=((t=this.story.genre)==null?void 0:t.replace(/\+/g,""))||"",i=a[o]||"steelblue";this.style.setProperty("--accent-color",i)}}async loadStory(){try{const e=await fetch(`/api/stories/${this.storyPath}`);if(!e.ok)throw new Error(`Failed to fetch story: ${e.statusText}`);this.story=await e.json()}catch(e){console.error(e),this.story=void 0}}async handleAddChapter(){if(!this.story||!this.storyPath)return;const t=Math.max(0,...this.story.chapters.map(i=>i.chapterNumber||0))+1,a={chapterNumber:t,title:`Chapter ${t}`,summary:"",comments:[],href:`./chapters/${t}.html`,storyTitle:this.story.storyTitle},o={...this.story,chapterCount:t,chapters:[...this.story.chapters,a]};try{const i=await fetch(`/api/stories/${this.storyPath}`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)});if(!i.ok)throw new Error("Failed to update story with new chapter");this.story=await i.json()}catch(i){console.error("Error adding chapter:",i)}}render(){return this.story?n`
+    `];let p=J;k([l()],p.prototype,"profile",1);k([d({type:String})],p.prototype,"storyPath",2);k([l()],p.prototype,"reviews",2);k([l()],p.prototype,"newComment",2);k([l()],p.prototype,"errorMessage",2);k([d({type:String})],p.prototype,"username",2);var be=Object.defineProperty,E=(r,e,t,a)=>{for(var o=void 0,i=r.length-1,s;i>=0;i--)(s=r[i])&&(o=s(e,t,o)||o);return o&&be(e,t,o),o};const q=class q extends y{constructor(){super(...arguments),this.mode="view"}connectedCallback(){super.connectedCallback(),this.storyPath&&this.loadStory()}updated(e){var t;if(e.has("storyPath")&&this.loadStory(),this.story){const a={Romance:"hotpink",Drama:"darkslategray",LGBTQ:"mediumorchid",Fantasy:"rebeccapurple",SciFi:"deepskyblue",Mystery:"darkslateblue",Comedy:"goldenrod",Action:"firebrick",Adventure:"teal",Thriller:"indigo",Horror:"crimson"},o=((t=this.story.genre)==null?void 0:t.replace(/\+/g,""))||"",i=a[o]||"steelblue";this.style.setProperty("--accent-color",i)}}async loadStory(){try{const e=await fetch(`/api/stories/${this.storyPath}`);if(!e.ok)throw new Error(`Failed to fetch story: ${e.statusText}`);this.story=await e.json()}catch(e){console.error(e),this.story=void 0}}async handleAddChapter(){if(!this.story||!this.storyPath)return;const t=Math.max(0,...this.story.chapters.map(i=>i.chapterNumber||0))+1,a={chapterNumber:t,title:`Chapter ${t}`,summary:"",comments:[],href:`./chapters/${t}.html`,storyTitle:this.story.storyTitle},o={...this.story,chapterCount:t,chapters:[...this.story.chapters,a]};try{const i=await fetch(`/api/stories/${this.storyPath}`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)});if(!i.ok)throw new Error("Failed to update story with new chapter");this.story=await i.json()}catch(i){console.error("Error adding chapter:",i)}}render(){return this.story?n`
             <episode-header></episode-header>
             <h1 style="padding: 2rem 0 1rem; color: #1a1a40;">${this.story.storyTitle}</h1>
             <section>
@@ -650,7 +684,7 @@ import{a as C,i as c,V as y,O as ee,d as D,b as te,x as n,r as g,e as X,c as l,f
             }
 
 
-        `];let x=q;E([d({attribute:"storypath"})],x.prototype,"storyPath");E([d()],x.prototype,"mode");E([l()],x.prototype,"story");var we=Object.defineProperty,k=(r,e,t,a)=>{for(var o=void 0,i=r.length-1,s;i>=0;i--)(s=r[i])&&(o=s(e,t,o)||o);return o&&we(e,t,o),o};const Q=class Q extends y{constructor(){super("episode:model"),this.chapterNumber=0,this.newComment="",this.errorMessage=""}get profile(){return console.log("Current profile:",this.model.profile),this.model.profile}connectedCallback(){super.connectedCallback(),this.storyPath&&this.chapterNumber&&this.loadChapter()}updated(e){(e.has("storyPath")||e.has("chapterNumber"))&&this.loadChapter()}async loadChapter(){if(!(!this.storyPath||!this.chapterNumber))try{const e=await fetch(`/api/stories/${this.storyPath}`);if(!e.ok)throw new Error(`Failed to fetch story: ${e.statusText}`);this.story=await e.json(),this.story&&this.story.chapters?this.selectedChapter=this.story.chapters.find(t=>t.chapterNumber===this.chapterNumber):this.selectedChapter=void 0,this.selectedChapter||console.error(`Chapter ${this.chapterNumber} not found in story ${this.storyPath}`)}catch(e){console.error(e),this.story=void 0,this.selectedChapter=void 0}}async handleAddComment(){var t;if(!this.storyPath||!this.chapterNumber||!this.newComment.trim())return;this.errorMessage="";const e=((t=this.profile)==null?void 0:t.username)||"Anonymous";console.log("Username:",e);try{const a=await fetch(`/api/stories/${this.storyPath}/chapters/${this.chapterNumber}/comments`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:e,text:this.newComment.trim()})});if(!a.ok){const i=await a.text();console.error("Error response:",i)}const o=await a.json();this.selectedChapter=o,this.newComment=""}catch(a){this.errorMessage=a instanceof Error?a.message:"Unknown error"}}render(){if(!this.selectedChapter)return n`<p>Loading chapter...</p>`;const e=this.selectedChapter;return n`
+        `];let x=q;E([d({attribute:"storypath"})],x.prototype,"storyPath");E([d()],x.prototype,"mode");E([l()],x.prototype,"story");var we=Object.defineProperty,P=(r,e,t,a)=>{for(var o=void 0,i=r.length-1,s;i>=0;i--)(s=r[i])&&(o=s(e,t,o)||o);return o&&we(e,t,o),o};const Q=class Q extends y{constructor(){super("episode:model"),this.chapterNumber=0,this.newComment="",this.errorMessage=""}get profile(){return console.log("Current profile:",this.model.profile),this.model.profile}connectedCallback(){super.connectedCallback(),this.storyPath&&this.chapterNumber&&this.loadChapter()}updated(e){(e.has("storyPath")||e.has("chapterNumber"))&&this.loadChapter()}async loadChapter(){if(!(!this.storyPath||!this.chapterNumber))try{const e=await fetch(`/api/stories/${this.storyPath}`);if(!e.ok)throw new Error(`Failed to fetch story: ${e.statusText}`);this.story=await e.json(),this.story&&this.story.chapters?this.selectedChapter=this.story.chapters.find(t=>t.chapterNumber===this.chapterNumber):this.selectedChapter=void 0,this.selectedChapter||console.error(`Chapter ${this.chapterNumber} not found in story ${this.storyPath}`)}catch(e){console.error(e),this.story=void 0,this.selectedChapter=void 0}}async handleAddComment(){var t;if(!this.storyPath||!this.chapterNumber||!this.newComment.trim())return;this.errorMessage="";const e=((t=this.profile)==null?void 0:t.username)||"Anonymous";console.log("Username:",e);try{const a=await fetch(`/api/stories/${this.storyPath}/chapters/${this.chapterNumber}/comments`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:e,text:this.newComment.trim()})});if(!a.ok){const i=await a.text();console.error("Error response:",i)}const o=await a.json();this.selectedChapter=o,this.newComment=""}catch(a){this.errorMessage=a instanceof Error?a.message:"Unknown error"}}render(){if(!this.selectedChapter)return n`<p>Loading chapter...</p>`;const e=this.selectedChapter;return n`
             <section class="chapter-container">
                 <header>
                     <a href="/app/stories/${this.storyPath}">&larr; Back to Story</a>
@@ -776,7 +810,7 @@ import{a as C,i as c,V as y,O as ee,d as D,b as te,x as n,r as g,e as X,c as l,f
             margin-top: 0.5rem;
         }
 
-    `;let m=Q;k([d({attribute:"storypath"})],m.prototype,"storyPath");k([d({type:Number,attribute:"chapternumber"})],m.prototype,"chapterNumber");k([l()],m.prototype,"story");k([l()],m.prototype,"selectedChapter");k([l()],m.prototype,"newComment");k([l()],m.prototype,"errorMessage");var ve=Object.defineProperty,xe=Object.getOwnPropertyDescriptor,V=(r,e,t,a)=>{for(var o=a>1?void 0:a?xe(e,t):e,i=r.length-1,s;i>=0;i--)(s=r[i])&&(o=(a?s(e,t,o):s(o))||o);return a&&o&&ve(e,t,o),o};const H=class H extends y{get profile(){return this.model.profile}render(){const{username:e,profilePicture:t,color:a="ffffff"}=this.profile||{};return n`
+    `;let m=Q;P([d({attribute:"storypath"})],m.prototype,"storyPath");P([d({type:Number,attribute:"chapternumber"})],m.prototype,"chapterNumber");P([l()],m.prototype,"story");P([l()],m.prototype,"selectedChapter");P([l()],m.prototype,"newComment");P([l()],m.prototype,"errorMessage");var ve=Object.defineProperty,xe=Object.getOwnPropertyDescriptor,V=(r,e,t,a)=>{for(var o=a>1?void 0:a?xe(e,t):e,i=r.length-1,s;i>=0;i--)(s=r[i])&&(o=(a?s(e,t,o):s(o))||o);return a&&o&&ve(e,t,o),o};const H=class H extends y{get profile(){return this.model.profile}render(){const{username:e,profilePicture:t,color:a="ffffff"}=this.profile||{};return n`
             <episode-header></episode-header>
             <section>
       <main class="card">
@@ -1034,7 +1068,7 @@ import{a as C,i as c,V as y,O as ee,d as D,b as te,x as n,r as g,e as X,c as l,f
             .custom-submit:hover {
                 background-color: #1a1a40ff;
             }
-    `];let $=N;R([d()],$.prototype,"username",2);R([l()],$.prototype,"profile",1);R([l()],$.prototype,"image",2);var Pe=Object.defineProperty,ke=Object.getOwnPropertyDescriptor,S=(r,e,t,a)=>{for(var o=a>1?void 0:a?ke(e,t):e,i=r.length-1,s;i>=0;i--)(s=r[i])&&(o=(a?s(e,t,o):s(o))||o);return a&&o&&Pe(e,t,o),o};let f=class extends F{constructor(){super(...arguments),this.stories=[],this.loading=!0,this.error=null,this.searchTerm="",this.selectedGenre=""}connectedCallback(){super.connectedCallback(),this.loadStories()}async loadStories(){try{this.loading=!0,this.error=null;const r=await fetch("/api/stories");if(!r.ok)throw new Error(`Failed to fetch stories: ${r.statusText}`);const e=await r.json();this.stories=e}catch(r){this.error=r.message||"Unknown error"}finally{this.loading=!1}}get filteredStories(){return this.stories.filter(r=>{const e=r.storyTitle.toLowerCase().includes(this.searchTerm)||r.authorName.toLowerCase().includes(this.searchTerm),t=!this.selectedGenre||r.genre===this.selectedGenre;return e&&t})}addStory(){window.location.href="/app/stories/add"}render(){return n`
+    `];let $=N;R([d()],$.prototype,"username",2);R([l()],$.prototype,"profile",1);R([l()],$.prototype,"image",2);var ke=Object.defineProperty,Pe=Object.getOwnPropertyDescriptor,S=(r,e,t,a)=>{for(var o=a>1?void 0:a?Pe(e,t):e,i=r.length-1,s;i>=0;i--)(s=r[i])&&(o=(a?s(e,t,o):s(o))||o);return a&&o&&ke(e,t,o),o};let f=class extends F{constructor(){super(...arguments),this.stories=[],this.loading=!0,this.error=null,this.searchTerm="",this.selectedGenre=""}connectedCallback(){super.connectedCallback(),this.loadStories()}async loadStories(){try{this.loading=!0,this.error=null;const r=await fetch("/api/stories");if(!r.ok)throw new Error(`Failed to fetch stories: ${r.statusText}`);const e=await r.json();this.stories=e}catch(r){this.error=r.message||"Unknown error"}finally{this.loading=!1}}get filteredStories(){return this.stories.filter(r=>{const e=r.storyTitle.toLowerCase().includes(this.searchTerm)||r.authorName.toLowerCase().includes(this.searchTerm),t=!this.selectedGenre||r.genre===this.selectedGenre;return e&&t})}addStory(){window.location.href="/app/stories/add"}render(){return n`
             <episode-header></episode-header>
             <section class="filters">
                 <input

@@ -80,10 +80,11 @@ export class HeaderElement extends View<Model, Msg> {
                         />
                         <menu>
                             <li>
-                                <label class="dark-toggle">
-                                    <input type="checkbox" @change=${toggleDarkMode} />
+                                <label @change=${toggleDarkMode}>
+                                    <input type="checkbox" />
                                     Dark Mode
                                 </label>
+                                
                             </li>
                             <li>
                                 ${this.loggedIn

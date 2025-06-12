@@ -62,13 +62,17 @@ export class HomeViewElement extends LitElement {
         return html`
             <episode-header></episode-header>
             <section>
-                <h2>Trending Stories Today</h2>
+                <div class="heading-with-icon">
+                    <h2>Trending Stories Today</h2>
+                    <svg class="icon star-icon">
+                        <use href="/icons/deco.svg#icon-star" />
+                    </svg>
+                </div>
                 ${this.loading
                         ? html`<p>Loading trending stories...</p>`
                         : this.trendingStories.length > 0
                                 ? html`<div class="story-list">${this.renderStoryCards(this.trendingStories)}</div>`
-                                : html`<p>No trending stories at the moment.</p>`
-                }
+                                : html`<p>No trending stories at the moment.</p>`}
             </section>
         `;
     }
@@ -144,6 +148,24 @@ export class HomeViewElement extends LitElement {
             p {
                 font-family: "Comfortaa", sans-serif;
             }
+
+            .heading-with-icon {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-top: 2rem;
+            }
+
+            .heading-with-icon h2 {
+                margin: 0;
+            }
+
+            .icon.star-icon {
+                width: 1.5rem; 
+                height: 1.5rem;
+                fill: #FFD700;
+            }
+            
         `,
     ];
 }
