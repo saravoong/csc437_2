@@ -1,9 +1,9 @@
 import { css, html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import headings from "../styles/headings.css.ts";
+//import headings from "../styles/headings.css.ts";
 import reset from "../styles/reset.css.ts";
-import page from "../styles/page.css.ts";
-import tokens from "../styles/tokens.css.ts";
+//import page from "../styles/page.css.ts";
+//import tokens from "../styles/tokens.css.ts";
 
 interface Story {
     "img-src": string;
@@ -78,94 +78,86 @@ export class HomeViewElement extends LitElement {
     }
 
     static styles = [
-        headings.styles,
         reset.styles,
-        page.styles,
-        tokens.styles,
         css`
-
-            :host {
-                display: block;
-                font-family: "Comfortaa", sans-serif;
-                background-color: #eeeef6ff;
-                min-height: 100vh;
+            section {
+                max-width: 1200px;
+                margin: 0 auto;
             }
 
-            h2 {
+            .heading-with-icon {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .heading-with-icon h2 {
                 font-size: 1.8rem;
-                margin: 1.5rem;
-                color: #1a1a40;
-                font-family: "Comfortaa", sans-serif;
+            }
+
+            .icon {
+                height: 1.8rem;
+                width: 1.8rem;
+                fill: gold;
             }
 
             .story-list {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 2rem;
-                padding: 1rem;
-                justify-content: center;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
             }
 
             .story-card {
-                width: 210px;
-                padding: 1rem;
                 background-color: white;
-                border-radius: 15px;
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-                transition: transform 0.2s ease, box-shadow 0.2s ease;
-                text-align: center;
+                border-radius: 0.5rem;
+                overflow: hidden;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                transition: transform 0.2s ease-in-out;
             }
 
             .story-card:hover {
-                transform: scale(1.05);
-                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+                transform: translateY(-5px);
             }
 
             .story-card img {
-                width: 180px;
-                border-radius: 1.8rem;
+                width: 100%;
+                height: 160px;
                 object-fit: cover;
             }
 
             .story-card h2 {
-                margin: 0.5rem 0 0.3rem;
-                font-weight: 700;
-                font-size: 1.1rem;
-                color: #1a1a40;
-            }
-
-            .story-card .meta {
-                font-size: 0.8rem;
-                color: #888;
-                margin-top: 0.3rem;
+                font-size: 1.2rem;
+                padding: 1rem;
+                margin: 0;
+                color: rgb(26, 26, 64);
             }
 
             a {
                 text-decoration: none;
                 color: inherit;
+                display: block;
             }
-            
+
             p {
                 font-family: "Comfortaa", sans-serif;
+                font-size: 1rem;
             }
 
-            .heading-with-icon {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-                margin-top: 2rem;
-            }
+            @media (max-width: 600px) {
+                .story-card img {
+                    height: 120px;
+                }
 
-            .heading-with-icon h2 {
-                margin: 0;
-            }
+                h2 {
+                    font-size: 1.5rem;
+                }
 
-            .icon.star-icon {
-                width: 1.5rem; 
-                height: 1.5rem;
-                fill: #FFD700;
+                .story-card h2 {
+                    font-size: 1rem;
+                }
             }
-            
-        `,
+        `
     ];
+
 }

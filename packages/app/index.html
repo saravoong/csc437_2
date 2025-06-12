@@ -23,6 +23,24 @@
                 </mu-store>
         </mu-auth>
     </mu-history>
+    <script>
+        const page = document.body;
+
+        const saved = localStorage.getItem("dark-mode");
+        if (saved === "true") {
+            page.classList.add("dark-mode");
+        }
+
+        page.addEventListener("darkmode:toggle", (event) => {
+            const enabled = event.detail.enabled;
+            page.classList.toggle("dark-mode", enabled);
+            localStorage.setItem("dark-mode", enabled);
+        });
+        
+        document.getElementById("signin")?.addEventListener("click", () => {
+            location.assign("/login.html");
+        });
+    </script>
 </body>
 
 </html>

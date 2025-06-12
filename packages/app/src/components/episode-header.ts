@@ -9,18 +9,11 @@ import {
 import { css, html } from "lit";
 import { state } from "lit/decorators.js";
 import reset from "../styles/reset.css.ts";
-import headings from "../styles/headings.css.ts";
-import page from "../styles/page.css.ts";
-import tokens from "../styles/tokens.css.ts";
+//import headings from "../styles/headings.css.ts";
+//import page from "../styles/page.css.ts";
+//import tokens from "../styles/tokens.css.ts";
 import { Model } from "../model.ts";
 import { Msg } from "../messages.ts";
-
-function toggleDarkMode(ev: InputEvent) {
-    const target = ev.target as HTMLInputElement;
-    const checked = target.checked;
-
-    Events.relay(ev, "dark-mode", { checked });
-}
 
 export class HeaderElement extends View<Model, Msg> {
     static uses = define({
@@ -80,11 +73,14 @@ export class HeaderElement extends View<Model, Msg> {
                         />
                         <menu>
                             <li>
-                                <label @change=${toggleDarkMode}>
-                                    <input type="checkbox" />
+                                <label class="darkmode">
+                                    <input
+                                            type="checkbox"
+                                            ?checked=${document.body.classList.contains("dark-mode")}
+                                            @change=${this.toggleDarkMode}
+                                    />
                                     Dark Mode
                                 </label>
-                                
                             </li>
                             <li>
                                 ${this.loggedIn
@@ -100,9 +96,6 @@ export class HeaderElement extends View<Model, Msg> {
 
     static styles = [
         reset.styles,
-        page.styles,
-        tokens.styles,
-        headings.styles,
         css`
             .front-page-header {
                 background-color: white;
@@ -283,5 +276,16 @@ export class HeaderElement extends View<Model, Msg> {
                 Sign In
             </button>
         `;
+    }
+
+    toggleDarkMode(e: Event) {
+        const checkbox = e.currentTarget as HTMLInputElement;
+        const enabled = checkbox.checked;
+
+        // Fire event on document.body instead of shadow root
+        document.body.dispatchEvent(new CustomEvent("darkmode:toggle", {
+            bubbles: true,
+            detail: { enabled }
+        }));
     }
 }

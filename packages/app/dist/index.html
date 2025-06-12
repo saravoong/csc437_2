@@ -9,9 +9,8 @@
     <link rel="stylesheet" href="/styles/reset.css" />
     <link rel="stylesheet" href="/styles/tokens.css" />
     <link rel="stylesheet" href="/styles/page.css" />
-  <script type="module" crossorigin src="/assets/main-BgogCcBl.js"></script>
+  <script type="module" crossorigin src="/assets/main-BVcYLcfb.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/reset.css-BPlqXxCa.js">
-  <link rel="modulepreload" crossorigin href="/assets/tokens.css-B8I_IFMe.js">
 </head>
 
 <body>
@@ -25,6 +24,24 @@
                 </mu-store>
         </mu-auth>
     </mu-history>
+    <script>
+        const page = document.body;
+
+        const saved = localStorage.getItem("dark-mode");
+        if (saved === "true") {
+            page.classList.add("dark-mode");
+        }
+
+        page.addEventListener("darkmode:toggle", (event) => {
+            const enabled = event.detail.enabled;
+            page.classList.toggle("dark-mode", enabled);
+            localStorage.setItem("dark-mode", enabled);
+        });
+        
+        document.getElementById("signin")?.addEventListener("click", () => {
+            location.assign("/login.html");
+        });
+    </script>
 </body>
 
 </html>

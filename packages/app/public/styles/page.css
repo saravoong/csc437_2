@@ -1,0 +1,102 @@
+body {
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 0;
+    font-family: "Comfortaa", sans-serif;
+    color: var(--text-color);
+}
+
+body.dark-mode {
+    background-color: rgb(26, 26, 64);
+    color: var(--text-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Comfortaa", sans-serif;
+}
+
+h1 {
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    color: var(--text-color);
+}
+
+h3 {
+    color: var(--text-color);
+}
+
+a {
+    color: var(--text-color);
+}
+
+ul {
+    color: var(--color-text);
+}
+
+ol {
+    color: var(--color-text);
+}
+
+p {
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+}
+
+a, p {
+    font-family: "Comfortaa", sans-serif;
+}
+
+hr {
+    color: var(--color-accent);
+    margin: 0;
+    padding: 0;
+}
+
+.title-with-icons {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+svg.icon {
+    display: inline;
+    height: 2em;
+    width: 2em;
+    vertical-align: top;
+}
+
+.bookmark-icon {
+    fill: rgb(41, 100, 154);
+}
+
+.love-icon {
+    fill: rgb(198, 46, 46);
+}
+
+.star-icon {
+    fill: rgb(243, 203, 116);
+}
+
+.stories-grid {
+    display: grid;
+    grid-template-columns: [start] 1fr 1fr 1fr 1fr[end];
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.stories-grid > * {
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    background-color: var(--background-color-stories-homepage);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+

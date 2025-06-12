@@ -1,9 +1,9 @@
 import { css, html, LitElement } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import headings from "../styles/headings.css.ts";
+//import headings from "../styles/headings.css.ts";
 import reset from "../styles/reset.css.ts";
-import page from "../styles/page.css.ts"
-import tokens from "../styles/tokens.css.ts"
+//import page from "../styles/page.css.ts"
+//import tokens from "../styles/tokens.css.ts"
 
 interface Story {
     "img-src": string;
@@ -108,10 +108,7 @@ export class AllStoryViewElement extends LitElement {
     }
 
     static styles = [
-        headings.styles,
         reset.styles,
-        page.styles,
-        tokens.styles,
         css`
             :host {
                 display: block;
